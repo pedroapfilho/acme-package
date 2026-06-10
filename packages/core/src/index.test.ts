@@ -47,4 +47,17 @@ describe("createStore", () => {
 
     expect(listener).not.toHaveBeenCalled();
   });
+
+  it("a listener that unsubscribes itself does not block other listeners", () => {
+    const store = createStore(0);
+    const second = vi.fn();
+    const unsubscribeFirst = store.subscribe(() => {
+      unsubscribeFirst();
+    });
+    store.subscribe(second);
+
+    store.set(1);
+
+    expect(second).toHaveBeenCalledTimes(1);
+  });
 });

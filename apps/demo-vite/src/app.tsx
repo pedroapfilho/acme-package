@@ -1,7 +1,6 @@
-import { createStore } from "@acme/core";
 import { useStore } from "@acme/react";
 
-const countStore = createStore(0);
+import { countStore } from "./store";
 
 const App = () => {
   const count = useStore(countStore);

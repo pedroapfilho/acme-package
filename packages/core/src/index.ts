@@ -19,6 +19,9 @@ const createStore = <T>(initial: T): Store<T> => {
   return {
     get: () => state,
     set: (next) => {
+      // typeof can't narrow `T | ((previous: T) => T)` when T itself is a
+      // function type — function-valued state must use set(() => fn), the
+      // same caveat zustand documents.
       const value = typeof next === "function" ? (next as (previous: T) => T)(state) : next;
       if (Object.is(value, state)) {
         return;
