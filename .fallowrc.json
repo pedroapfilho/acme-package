@@ -1,12 +1,6 @@
 {
   "$schema": "https://raw.githubusercontent.com/fallow-rs/fallow/main/schema.json",
-  "entry": [
-    "apps/demo-vite/src/main.tsx",
-    "apps/docs/app/layout.tsx",
-    "apps/docs/source.config.ts",
-    "oxlint.config.ts",
-    "**/tsdown.config.ts"
-  ],
+  "entry": ["oxlint.config.ts", "**/tsdown.config.ts"],
   "ignorePatterns": ["apps/docs/content/**", "apps/docs/next-env.d.ts"],
   "ignoreDependencies": ["@vitest/coverage-v8", "jsdom", "react-dom"]
 }

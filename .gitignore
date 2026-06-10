@@ -8,11 +8,14 @@ build/
 .turbo/
 .next/
 .source/
+.vite/
 *.tsbuildinfo
 
 # test
 coverage/
 test-results/
+playwright-report/
+playwright/.cache/
 
 # env
 .env
