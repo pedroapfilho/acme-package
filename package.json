@@ -35,8 +35,12 @@
     "turbo": "^2.9.16"
   },
   "lint-staged": {
-    "!(*.d).{ts,tsx,mts,cts,js,jsx,mjs,cjs}": ["oxlint"],
-    "*.{ts,tsx,mts,cts,js,jsx,mjs,cjs,json,md}": ["oxfmt"]
+    "!(*.d).{ts,tsx,mts,cts,js,jsx,mjs,cjs}": [
+      "oxlint"
+    ],
+    "*.{ts,tsx,mts,cts,js,jsx,mjs,cjs,json,md}": [
+      "oxfmt"
+    ]
   },
   "engines": {
     "node": ">=24"
