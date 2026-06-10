@@ -1,0 +1,33 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# build
+dist/
+build/
+.turbo/
+.next/
+.source/
+*.tsbuildinfo
+
+# test
+coverage/
+test-results/
+
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# tooling
+.fallow/
+*.log
+
+# editor / os
+.DS_Store
+.vscode/
+.idea/
+
+# claude code local
+.claude/
