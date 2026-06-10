@@ -15,7 +15,7 @@ packages/
   core/                @acme/core (publishable, platform-neutral example lib)
   react/               @acme/react (publishable React adapter, peer react ^18.3.1 || ^19)
 apps/
-  docs/                Fumadocs on Next 16: https://acme-package.docs.localhost (portless)
+  docs/                Fumadocs on Next 16: https://acme-package.docs.localhost (portless; URL set via --name flag in apps/docs dev script)
   demo-vite/           Vite playground consuming both packages via workspace:*
 ```
 
@@ -41,7 +41,7 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 - kebab-case filenames; oxlint (`oxlint-config-awesomeness`) + oxfmt; no ESLint/Prettier
 - `type` over `interface`, arrow functions, exports at end, WHY-comments only
 - Node ≥24, pnpm 11.1.3 (pinned `packageManager`)
-- No e2e/Playwright by design (library profile); the demo is a dev playground
+- No e2e/Playwright by design (library profile). The demo is a dev playground, not a test harness.
 
 ## Notable decisions
 

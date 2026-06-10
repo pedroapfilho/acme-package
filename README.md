@@ -8,11 +8,13 @@ Fork-ready monorepo template for published TypeScript libraries. tsdown ESM buil
 
 ## Quickstart
 
+Prerequisites: Node ≥24, pnpm 11 (pinned via `packageManager`), and [portless](https://www.npmjs.com/package/portless) running as the local HTTPS proxy (the docs dev URL depends on it).
+
 ```bash
 pnpm install
-pnpm dev          # docs at https://acme-package.docs.localhost + vite demo
+pnpm dev          # docs at https://acme-package.docs.localhost · demo at http://localhost:5173
 pnpm test         # vitest across packages
-pnpm build        # tsdown dist for publishables
+pnpm build        # builds all workspaces (packages + docs)
 ```
 
 ## Packages
@@ -46,13 +48,14 @@ Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `
 
 ## Scripts
 
-| Command                                               | What                    |
-| ----------------------------------------------------- | ----------------------- |
-| `pnpm dev` / `build` / `test` / `test:coverage`       | turbo across workspaces |
-| `pnpm lint` / `format` / `format:check` / `typecheck` | oxlint / oxfmt / tsc    |
-| `pnpm fallow:dead` / `fallow:health`                  | dead-code / repo health |
-| `pnpm changeset` / `version-packages` / `release`     | Changesets flow         |
+| Command                                                                | What                                                  |
+| ---------------------------------------------------------------------- | ----------------------------------------------------- |
+| `pnpm dev`                                                             | run all dev servers (turbo)                           |
+| `pnpm build` / `pnpm test` / `pnpm test:coverage`                      | build / test across workspaces                        |
+| `pnpm lint` / `pnpm format` / `pnpm format:check` / `pnpm typecheck`   | oxlint / oxfmt / tsc                                  |
+| `pnpm fallow:dead` / `fallow:dupes` / `fallow:health` / `fallow:audit` | dead code / duplicates / health score / audit vs main |
+| `pnpm changeset` / `version-packages` / `release`                      | Changesets flow                                       |
 
 ## Stack
 
-pnpm 11 · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 4 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
+pnpm 11.1.3 (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 4 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
