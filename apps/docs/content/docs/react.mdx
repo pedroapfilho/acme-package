@@ -1,0 +1,29 @@
+---
+title: "@acme/react"
+description: The React adapter example package.
+---
+
+A `useStore` hook that subscribes a component to an `@acme/core` store.
+
+```tsx
+import { createStore } from "@acme/core";
+import { useStore } from "@acme/react";
+
+const countStore = createStore(0);
+
+const Counter = () => {
+  const count = useStore(countStore);
+  return (
+    <button onClick={() => countStore.set((previous) => previous + 1)} type="button">
+      count is {count}
+    </button>
+  );
+};
+```
+
+## Notes
+
+- React `^18.3.1 || ^19.0.0` is a peer dependency; `react-dom` is not
+  required.
+- The hook is built on `useSyncExternalStore`, so it is SSR-safe: the server
+  snapshot is the store's current state and hydration stays consistent.

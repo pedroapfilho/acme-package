@@ -1,0 +1,51 @@
+---
+title: Using this template
+description: Fork, rename one scope, publish.
+---
+
+## Rename surface
+
+Everything you must touch after forking, in order:
+
+1. **The `@acme` scope.** Rename it to your scope in
+   `packages/core/package.json`, `packages/react/package.json`, and the
+   imports in `apps/demo-vite` and `apps/docs`. One pass does it:
+
+   ```bash
+   grep -rl "@acme" --include="*.json" --include="*.ts" --include="*.tsx" packages apps | xargs sed -i '' 's/@acme/@your-scope/g'
+   ```
+
+2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
+   **both** publishable packages, and the GitHub link in
+   `apps/docs/lib/layout.shared.tsx`. The `repository.url` matters more than
+   it looks: npm provenance validates it against the repository that runs the
+   publish — a renamed fork's first `release` fails if you skip this.
+
+3. **The portless name** in the docs dev script
+   (`apps/docs/package.json` → `"dev"`).
+
+4. **The LICENSE holder.**
+
+## Publishing
+
+Releases run through Changesets:
+
+1. `pnpm changeset` — describe the change and pick a bump for each affected
+   package.
+2. CI's `release.yml` opens a "Version Packages" PR that applies the bumps and
+   updates changelogs.
+3. Merging that PR publishes to npm with provenance.
+
+The workflow needs an `NPM_TOKEN` secret on the repository.
+
+## Adding a package
+
+Copy `packages/core` (or `packages/react` if the new package binds to React).
+The package shape is the contract — keep it identical across packages:
+
+- `exports` map with `types` first
+- `"files": ["dist"]`
+- `"sideEffects": false`
+- a `tsdown.config.ts` for the build
+- `prepack` runs the build
+- tests via `@repo/config-vitest`
