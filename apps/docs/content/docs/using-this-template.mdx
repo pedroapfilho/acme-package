@@ -24,8 +24,8 @@ Everything you must touch after forking, in order:
 
 2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
    **both** publishable packages, and:
-   - `GITHUB_URL` in `apps/docs/lib/layout.shared.tsx` — also controls the
-     `nav.title` wordmark string on the same line below it.
+   - `GITHUB_URL` in `apps/docs/lib/layout.shared.tsx`; the same file also
+     contains the `nav.title` wordmark string.
    - `GITHUB_DOCS_BASE` in `apps/docs/app/(docs)/[[...slug]]/page.tsx` —
      drives the "Open in GitHub" link on every docs page; silently points at
      the original repo if skipped.

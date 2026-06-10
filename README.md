@@ -31,7 +31,7 @@ pnpm build        # builds all workspaces (packages + docs)
 | App              | Role                                                               |
 | ---------------- | ------------------------------------------------------------------ |
 | `apps/docs`      | Fumadocs site (`https://acme-package.docs.localhost` via portless) |
-| `apps/demo-vite` | Vite playground consuming both packages from source                |
+| `apps/demo-vite` | Vite playground consuming both packages via `workspace:*`          |
 
 ## Use this template
 
