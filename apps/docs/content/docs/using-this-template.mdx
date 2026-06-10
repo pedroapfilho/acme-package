@@ -12,14 +12,29 @@ Everything you must touch after forking, in order:
    imports in `apps/demo-vite` and `apps/docs`. One pass does it:
 
    ```bash
-   grep -rl "@acme" --include="*.json" --include="*.ts" --include="*.tsx" packages apps | xargs sed -i '' 's/@acme/@your-scope/g'
+   grep -rl "@acme" \
+     --include="*.json" --include="*.ts" --include="*.tsx" --include="*.mdx" \
+     packages apps \
+     | xargs perl -pi -e "s/\@acme/\@your-scope/g"
    ```
 
+   `perl -pi` is portable across macOS and Linux (unlike `sed -i ''` which is
+   BSD-only and fails on GNU sed in CI). The `--include="*.mdx"` ensures docs
+   pages that reference `@acme/core` or `@acme/react` are rewritten too.
+
 2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
-   **both** publishable packages, and the GitHub link in
-   `apps/docs/lib/layout.shared.tsx`. The `repository.url` matters more than
-   it looks: npm provenance validates it against the repository that runs the
-   publish — a renamed fork's first `release` fails if you skip this.
+   **both** publishable packages, and:
+   - `GITHUB_URL` in `apps/docs/lib/layout.shared.tsx` — also controls the
+     `nav.title` wordmark string on the same line below it.
+   - `GITHUB_DOCS_BASE` in `apps/docs/app/(docs)/[[...slug]]/page.tsx` —
+     drives the "Open in GitHub" link on every docs page; silently points at
+     the original repo if skipped.
+   - `metadataBase`, `metadata.title`, and `metadata.description` in
+     `apps/docs/app/layout.tsx`.
+
+   The `repository.url` matters more than it looks: npm provenance validates
+   it against the repository that runs the publish — a renamed fork's first
+   `release` fails if you skip this.
 
 3. **The portless name** in the docs dev script
    (`apps/docs/package.json` → `"dev"`).
@@ -40,7 +55,8 @@ The workflow needs an `NPM_TOKEN` secret on the repository.
 
 ## Adding a package
 
-Copy `packages/core` (or `packages/react` if the new package binds to React).
+Copy `packages/core` (or `packages/react` if the new package binds to React),
+then rename the `name` field in the copy's `package.json`.
 The package shape is the contract — keep it identical across packages:
 
 - `exports` map with `types` first
