@@ -13,6 +13,11 @@ permissions:
 
 jobs:
   release:
+    # Dormant in the template: the example @acme/* packages are placeholders a
+    # fork renames before publishing. Forks activate releases by adding the
+    # NPM_TOKEN secret (otherwise changesets falls back to OIDC and tries to
+    # publish the placeholders).
+    if: ${{ secrets.NPM_TOKEN != '' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
