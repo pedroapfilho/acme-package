@@ -1,13 +1,9 @@
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 
-// Fork-facing constants: forks rename the wordmark below and update these two
-// URLs — every GitHub link and absolute page URL in the docs derives from here.
-const GITHUB_URL = "https://github.com/pedroapfilho/acme-package";
-
-const SITE_ORIGIN = "https://docs.acme-package.dev";
+import { GITHUB_URL } from "./site";
 
 // Layout options shared between the docs layout and any home layout. The nav
-// title is a plain text wordmark — no image asset needed.
+// title is a plain text wordmark forks rename — no image asset needed.
 const baseOptions = (): BaseLayoutProps => ({
   githubUrl: GITHUB_URL,
   nav: {
@@ -16,4 +12,4 @@ const baseOptions = (): BaseLayoutProps => ({
   },
 });
 
-export { baseOptions, GITHUB_URL, SITE_ORIGIN };
+export { baseOptions };

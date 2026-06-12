@@ -5,7 +5,7 @@ import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-rea
 import { type ComponentProps, useMemo, useState, useTransition } from "react";
 
 import { cn } from "../../lib/cn";
-import { SITE_ORIGIN } from "../../lib/layout.shared";
+import { SITE_ORIGIN } from "../../lib/site";
 import { buttonVariants } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
@@ -51,15 +51,17 @@ const MarkdownCopyButton = ({
         ]);
         setHasCopyError(false);
       } catch {
-        // a failed fetch must not poison the cache, or every retry replays the same failure
+        // fetch and clipboard failures both land here — evict so a retry refetches
+        // instead of replaying a rejected cached promise
         cache.delete(markdownUrl);
         setHasCopyError(true);
       }
     });
   });
 
-  // useCopyButton flips checked as soon as the transition starts — suppress it on failure
-  const showSuccessCheck = checked && !hasCopyError;
+  // useCopyButton flips checked in a microtask, before the transition settles —
+  // only show the check once the copy actually finished and succeeded
+  const showSuccessCheck = checked && !isPending && !hasCopyError;
 
   return (
     <button
@@ -77,7 +79,10 @@ const MarkdownCopyButton = ({
       )}
     >
       {showSuccessCheck ? <Check /> : <Copy />}
-      {hasCopyError ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
+      {/* live region so screen readers announce the failure, not just sighted users */}
+      <span aria-live="polite">
+        {hasCopyError ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
+      </span>
     </button>
   );
 };

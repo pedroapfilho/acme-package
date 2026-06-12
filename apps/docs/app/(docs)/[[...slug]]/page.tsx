@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MarkdownCopyButton, ViewOptionsPopover } from "@/components/ai/page-actions";
-import { GITHUB_URL } from "@/lib/layout.shared";
+import { GITHUB_URL } from "@/lib/site";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 

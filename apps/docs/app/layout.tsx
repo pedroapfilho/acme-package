@@ -4,7 +4,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-import { SITE_ORIGIN } from "@/lib/layout.shared";
+import { SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
   description:
