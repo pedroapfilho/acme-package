@@ -46,5 +46,5 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 ## Notable decisions
 
 - `@acme/*` is the placeholder publish scope; forks rename it once (README → "Use this template", docs → "Using this template"). `@repo/*` configs are never renamed.
-- CI is test/lint/format/fallow (+ release) on actions @v6, the library-profile standard.
+- CI is test/lint/format/fallow (+ release) on actions @v6, the library-profile standard, plus a react-doctor scan (PRs and pushes to main).
 - This repo is registered in the orchestrator (`~/dev/orchestrator`) as `LIBRARY_SOURCE_OF_TRUTH`; tsconfig (`base.json`/`library.json`) and root devDependency versions are verifier baselines for the fleet's library repos. Change them deliberately.
