@@ -2,9 +2,10 @@
 import { usePathname } from "fumadocs-core/framework";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
-import { type ComponentProps, useMemo, useTransition } from "react";
+import { type ComponentProps, useMemo, useState, useTransition } from "react";
 
 import { cn } from "../../lib/cn";
+import { SITE_ORIGIN } from "../../lib/site";
 import { buttonVariants } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
@@ -13,7 +14,7 @@ const cache = new Map<string, Promise<string>>();
 /**
  * see https://fumadocs.dev/docs/integrations/llms#page-actions to customize.
  */
-export function MarkdownCopyButton({
+const MarkdownCopyButton = ({
   markdownUrl,
   ...props
 }: ComponentProps<"button"> & {
@@ -21,28 +22,46 @@ export function MarkdownCopyButton({
    * A URL to fetch the raw Markdown/MDX content of page
    */
   markdownUrl: string;
-}) {
+}) => {
   const [isPending, startTransition] = useTransition();
+  const [hasCopyError, setHasCopyError] = useState(false);
   const [checked, onClick] = useCopyButton(() => {
     startTransition(async () => {
-      const cached = cache.get(markdownUrl);
-      if (cached) {
-        await navigator.clipboard.writeText(await cached);
-        return;
-      }
+      try {
+        const cached = cache.get(markdownUrl);
+        if (cached) {
+          await navigator.clipboard.writeText(await cached);
+          setHasCopyError(false);
+          return;
+        }
 
-      const promise = (async () => {
-        const res = await fetch(markdownUrl);
-        return res.text();
-      })();
-      cache.set(markdownUrl, promise);
-      await navigator.clipboard.write([
-        new ClipboardItem({
-          "text/plain": promise,
-        }),
-      ]);
+        const promise = (async () => {
+          const res = await fetch(markdownUrl);
+          if (!res.ok) {
+            throw new Error(`Failed to fetch ${markdownUrl}: ${res.status}`);
+          }
+          return res.text();
+        })();
+        cache.set(markdownUrl, promise);
+        // ClipboardItem accepts the unsettled promise so the write stays inside the user gesture (Safari)
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            "text/plain": promise,
+          }),
+        ]);
+        setHasCopyError(false);
+      } catch {
+        // fetch and clipboard failures both land here — evict so a retry refetches
+        // instead of replaying a rejected cached promise
+        cache.delete(markdownUrl);
+        setHasCopyError(true);
+      }
     });
   });
+
+  // useCopyButton flips checked in a microtask, before the transition settles —
+  // only show the check once the copy actually finished and succeeded
+  const showSuccessCheck = checked && !isPending && !hasCopyError;
 
   return (
     <button
@@ -59,16 +78,19 @@ export function MarkdownCopyButton({
         props.className,
       )}
     >
-      {checked ? <Check /> : <Copy />}
-      {props.children ?? "Copy Markdown"}
+      {showSuccessCheck ? <Check /> : <Copy />}
+      {/* live region so screen readers announce the failure, not just sighted users */}
+      <span aria-live="polite">
+        {hasCopyError ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
+      </span>
     </button>
   );
-}
+};
 
 /**
  * see https://fumadocs.dev/docs/integrations/llms#page-actions to customize.
  */
-export function ViewOptionsPopover({
+const ViewOptionsPopover = ({
   githubUrl,
   markdownUrl,
   ...props
@@ -82,11 +104,11 @@ export function ViewOptionsPopover({
    * A URL to the raw Markdown/MDX content of page
    */
   markdownUrl?: string;
-}) {
+}) => {
   const pathname = usePathname();
   const items = useMemo(() => {
-    const pageUrl =
-      typeof window === "undefined" ? pathname : new URL(pathname, window.location.origin);
+    // built from the canonical origin so server and client render identical hrefs (no hydration mismatch)
+    const pageUrl = new URL(pathname, SITE_ORIGIN);
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 
     return [
@@ -242,4 +264,6 @@ export function ViewOptionsPopover({
       </PopoverContent>
     </Popover>
   );
-}
+};
+
+export { MarkdownCopyButton, ViewOptionsPopover };

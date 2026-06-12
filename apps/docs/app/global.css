@@ -8,16 +8,26 @@
 }
 
 /* Scroll-driven reading progress indicator */
+.reading-progress-bar {
+  /* resting scaleX(0) keeps the bar invisible when reduced motion disables the animation */
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  /* transform animates on the compositor — animating width would force layout every frame */
   @keyframes reading-progress {
-    from {
-      width: 0%;
+    to {
+      transform: scaleX(1);
     }
   }
 
-  .reading-progress-bar {
-    animation: reading-progress linear both;
-    animation-timeline: scroll(root block);
+  /* without timeline support the 0s animation would fill straight to scaleX(1) and pin a full-width bar */
+  @supports (animation-timeline: scroll()) {
+    .reading-progress-bar {
+      animation: reading-progress linear both;
+      animation-timeline: scroll(root block);
+    }
   }
 }
 
