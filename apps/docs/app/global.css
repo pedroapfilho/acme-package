@@ -22,9 +22,12 @@
     }
   }
 
-  .reading-progress-bar {
-    animation: reading-progress linear both;
-    animation-timeline: scroll(root block);
+  /* without timeline support the 0s animation would fill straight to scaleX(1) and pin a full-width bar */
+  @supports (animation-timeline: scroll()) {
+    .reading-progress-bar {
+      animation: reading-progress linear both;
+      animation-timeline: scroll(root block);
+    }
   }
 }
 
