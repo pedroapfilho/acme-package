@@ -8,10 +8,17 @@
 }
 
 /* Scroll-driven reading progress indicator */
+.reading-progress-bar {
+  /* resting scaleX(0) keeps the bar invisible when reduced motion disables the animation */
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  /* transform animates on the compositor — animating width would force layout every frame */
   @keyframes reading-progress {
-    from {
-      width: 0%;
+    to {
+      transform: scaleX(1);
     }
   }
 
