@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MarkdownCopyButton, ViewOptionsPopover } from "@/components/ai/page-actions";
+import { GITHUB_URL } from "@/lib/layout.shared";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
-const GITHUB_DOCS_BASE =
-  "https://github.com/pedroapfilho/acme-package/blob/main/apps/docs/content/docs";
+// Derived from the shared GITHUB_URL so forks only update the repo URL in one place
+const GITHUB_DOCS_BASE = `${GITHUB_URL}/blob/main/apps/docs/content/docs`;
 
 type PageProps = {
   params: Promise<{ slug?: Array<string> }>;
