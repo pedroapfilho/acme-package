@@ -24,13 +24,10 @@ Everything you must touch after forking, in order:
 
 2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
    **both** publishable packages, and:
-   - `GITHUB_URL` in `apps/docs/lib/layout.shared.tsx`; the same file also
-     contains the `nav.title` wordmark string.
-   - `GITHUB_DOCS_BASE` in `apps/docs/app/(docs)/[[...slug]]/page.tsx` —
-     drives the "Open in GitHub" link on every docs page; silently points at
-     the original repo if skipped.
-   - `metadataBase`, `metadata.title`, and `metadata.description` in
-     `apps/docs/app/layout.tsx`.
+   - `GITHUB_URL` and `SITE_ORIGIN` in `apps/docs/lib/site.ts` — the single
+     module every docs GitHub link and absolute page URL derives from.
+   - the `nav.title` wordmark string in `apps/docs/lib/layout.shared.tsx`.
+   - `metadata.title` and `metadata.description` in `apps/docs/app/layout.tsx`.
 
    The `repository.url` matters more than it looks: npm provenance validates
    it against the repository that runs the publish — a renamed fork's first
