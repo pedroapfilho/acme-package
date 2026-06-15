@@ -38,7 +38,7 @@ pnpm build        # builds all workspaces (packages + docs)
 The rename surface is small. Full walkthrough: docs → "Using this template".
 
 1. `@acme` scope → your npm scope (`packages/*/package.json` + imports in `apps/`, including the docs `.mdx` content)
-2. Repo identity: root `name`, `repository.url` in BOTH publishable packages (npm provenance validates it against the publishing repo, so a renamed fork's first release fails if skipped), the GitHub URL + nav title in `apps/docs/lib/layout.shared.tsx`, `GITHUB_DOCS_BASE` in `apps/docs/app/(docs)/[[...slug]]/page.tsx`, and the metadata in `apps/docs/app/layout.tsx`
+2. Repo identity: root `name`, `repository.url` in BOTH publishable packages (npm provenance validates it against the publishing repo, so a renamed fork's first release fails if skipped), `GITHUB_URL` + `SITE_ORIGIN` in `apps/docs/lib/site.ts`, the nav wordmark in `apps/docs/lib/layout.shared.tsx`, and `metadata.title` + `metadata.description` in `apps/docs/app/layout.tsx`
 3. Portless name in the `apps/docs` dev script
 4. LICENSE holder
 
