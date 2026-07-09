@@ -19,7 +19,6 @@ const Popover = ({ children }: { children: React.ReactNode }) => {
 
 type PopoverTriggerProps = React.ComponentPropsWithRef<"button">;
 
-// React 19: ref is a regular prop, so it flows through the props spread — no forwardRef needed
 const PopoverTrigger = ({ children, className, ...props }: PopoverTriggerProps) => {
   const ctx = React.use(PopoverContext);
   if (!ctx) {
@@ -48,16 +47,12 @@ const PopoverContent = ({ children, className, ...props }: PopoverContentProps) 
     <div
       {...props}
       className={cn(
-        // reset native popover UA margin; hide when not open
         "m-0 [&:not(:popover-open)]:hidden",
-        // visual styles
         "bg-fd-popover/60 text-fd-popover-foreground z-50 max-w-[98vw] min-w-[240px] overflow-y-auto rounded-xl border p-2 text-sm shadow-lg backdrop-blur-lg",
-        // CSS Anchor Positioning: place below the trigger
         "mt-1 [position-anchor:--fd-popover-anchor] [position-area:block-end_span-inline] [position-try-fallbacks:flip-block]",
         className,
       )}
       id={ctx.popoverId}
-      // popover is a valid HTML attribute in React 19+
       popover="auto"
     >
       {children}
