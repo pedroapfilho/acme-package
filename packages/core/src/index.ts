@@ -8,10 +8,6 @@ type Store<T> = {
   subscribe: (listener: Listener) => () => void;
 };
 
-/**
- * A minimal external store. Exists to demonstrate the canonical package
- * shape (build, exports, tests, docs) — replace with your real library.
- */
 const createStore = <T>(initial: T): Store<T> => {
   let state = initial;
   const listeners = new Set<Listener>();

@@ -11,16 +11,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 const cache = new Map<string, Promise<string>>();
 
-/**
- * see https://fumadocs.dev/docs/integrations/llms#page-actions to customize.
- */
 const MarkdownCopyButton = ({
   markdownUrl,
   ...props
 }: ComponentProps<"button"> & {
-  /**
-   * A URL to fetch the raw Markdown/MDX content of page
-   */
   markdownUrl: string;
 }) => {
   const [isPending, startTransition] = useTransition();
@@ -79,7 +73,6 @@ const MarkdownCopyButton = ({
       )}
     >
       {showSuccessCheck ? <Check /> : <Copy />}
-      {/* live region so screen readers announce the failure, not just sighted users */}
       <span aria-live="polite">
         {hasCopyError ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
       </span>
@@ -87,22 +80,12 @@ const MarkdownCopyButton = ({
   );
 };
 
-/**
- * see https://fumadocs.dev/docs/integrations/llms#page-actions to customize.
- */
 const ViewOptionsPopover = ({
   githubUrl,
   markdownUrl,
   ...props
 }: ComponentProps<"button"> & {
-  /**
-   * Source file URL on GitHub
-   */
   githubUrl?: string;
-
-  /**
-   * A URL to the raw Markdown/MDX content of page
-   */
   markdownUrl?: string;
 }) => {
   const pathname = usePathname();
