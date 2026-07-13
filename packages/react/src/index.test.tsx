@@ -10,11 +10,15 @@ import { useStore } from ".";
 const counterStore = () => createStore(0);
 
 type CounterProps = {
+  serverSnapshot?: number;
   store: ReturnType<typeof counterStore>;
 };
 
-const Counter = ({ store }: CounterProps) => {
-  const count = useStore(store);
+const Counter = ({ serverSnapshot, store }: CounterProps) => {
+  const count = useStore(
+    store,
+    serverSnapshot === undefined ? undefined : { getServerSnapshot: () => serverSnapshot },
+  );
   return (
     <button onClick={() => store.set((previous) => previous + 1)} type="button">
       count: {count}
@@ -50,17 +54,31 @@ describe("useStore", () => {
     expect(html).not.toContain("count: <!-- -->0");
   });
 
-  it("hydrates without a mismatch (server snapshot matches client)", () => {
-    const store = counterStore();
-    store.set(7);
+  it("hydrates distinct server and client stores from a serialized snapshot", () => {
+    const serverStore = counterStore();
+    serverStore.set(7);
+    const serverSnapshot = serverStore.get();
     const container = document.createElement("div");
-    container.innerHTML = renderToString(<Counter store={store} />);
+    container.innerHTML = renderToString(
+      <Counter serverSnapshot={serverSnapshot} store={serverStore} />,
+    );
+    const clientStore = counterStore();
     const onRecoverableError = vi.fn();
+    let root: ReturnType<typeof hydrateRoot> | undefined;
 
     act(() => {
-      hydrateRoot(container, <Counter store={store} />, { onRecoverableError });
+      root = hydrateRoot(
+        container,
+        <Counter serverSnapshot={serverSnapshot} store={clientStore} />,
+        { onRecoverableError },
+      );
     });
 
     expect(onRecoverableError).not.toHaveBeenCalled();
+
+    act(() => clientStore.set(1));
+    expect(container).toHaveTextContent("count: 1");
+
+    act(() => root?.unmount());
   });
 });

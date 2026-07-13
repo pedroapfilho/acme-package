@@ -25,5 +25,27 @@ const Counter = () => {
 
 - React `^18.3.1 || ^19.0.0` is a peer dependency; `react-dom` is not
   required.
-- The hook is built on `useSyncExternalStore`, so it is SSR-safe: the server
-  snapshot is the store's current state and hydration stays consistent.
+- The hook is built on `useSyncExternalStore`. Client-only callers can use the
+  store directly, as shown above.
+
+## Server rendering
+
+Server-rendered apps must give hydration the same serialized value that was
+used to render the HTML. This matters when the server and browser create
+distinct store instances:
+
+```tsx
+const Counter = ({ initialCount }: { initialCount: number }) => {
+  const count = useStore(countStore, {
+    getServerSnapshot: () => initialCount,
+  });
+
+  return <span>{count}</span>;
+};
+```
+
+Pass `initialCount` to the client as serialized page data. The callback must
+return that stable value during server rendering and hydration; subsequent
+updates come from the browser store's `get` and `subscribe` methods. When no
+callback is provided, `useStore` keeps the existing behavior and uses
+`store.get` for the server snapshot.
