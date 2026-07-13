@@ -1,7 +1,12 @@
 import type { Store } from "@acme/core";
 import { useSyncExternalStore } from "react";
 
-const useStore = <T>(store: Store<T>): T =>
-  useSyncExternalStore(store.subscribe, store.get, store.get);
+type UseStoreOptions<T> = {
+  getServerSnapshot?: () => T;
+};
+
+const useStore = <T>(store: Store<T>, options?: UseStoreOptions<T>): T =>
+  useSyncExternalStore(store.subscribe, store.get, options?.getServerSnapshot ?? store.get);
 
 export { useStore };
+export type { UseStoreOptions };
