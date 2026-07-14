@@ -11,7 +11,7 @@ const PopoverContext = React.createContext<PopoverContextValue | null>(null);
 
 const Popover = ({ children }: { children: React.ReactNode }) => {
   const rawId = React.useId();
-  // useId returns ":r0:" style strings — strip colons for a valid HTML id
+  // useId returns ":r0:" style strings; strip colons for a valid HTML id
   const popoverId = `fd-popover-${rawId.replaceAll(":", "")}`;
   const contextValue = React.useMemo(() => ({ popoverId }), [popoverId]);
   return <PopoverContext value={contextValue}>{children}</PopoverContext>;

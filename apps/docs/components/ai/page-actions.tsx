@@ -45,7 +45,7 @@ const MarkdownCopyButton = ({
         ]);
         setHasCopyError(false);
       } catch {
-        // fetch and clipboard failures both land here — evict so a retry refetches
+        // fetch and clipboard failures both land here: evict so a retry refetches
         // instead of replaying a rejected cached promise
         cache.delete(markdownUrl);
         setHasCopyError(true);
@@ -53,7 +53,7 @@ const MarkdownCopyButton = ({
     });
   });
 
-  // useCopyButton flips checked in a microtask, before the transition settles —
+  // useCopyButton flips checked in a microtask, before the transition settles;
   // only show the check once the copy actually finished and succeeded
   const showSuccessCheck = checked && !isPending && !hasCopyError;
 
