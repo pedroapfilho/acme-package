@@ -16,14 +16,14 @@ store.set((previous) => ({ count: previous.count + 1 }));
 
 ## API
 
-- `createStore<T>(initial)` — returns a `Store<T>`.
-- `get()` — returns the current state.
-- `set(next | updater)` — replaces the state with a value, or with the result
+- `createStore<T>(initial)`: returns a `Store<T>`.
+- `get()`: returns the current state.
+- `set(next | updater)`: replaces the state with a value, or with the result
   of an updater receiving the previous state. Listeners are skipped when the
   next state is `Object.is`-equal to the current one.
-- `subscribe(listener)` — registers a listener called after every state
+- `subscribe(listener)`: registers a listener called after every state
   change; returns an unsubscribe function.
 
 The zustand-style caveat applies: because `set` treats a function argument as
-an updater, function-valued state must be wrapped — `set(() => fn)`, not
+an updater, function-valued state must be wrapped as `set(() => fn)`, not
 `set(fn)`.

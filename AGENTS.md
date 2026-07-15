@@ -28,7 +28,7 @@ Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `lint`, `typech
 Every publishable package keeps the same shape; copy `packages/core` to add one:
 
 - `exports: { ".": { types, default } }`, `files: ["dist"]`, `sideEffects: false`, `publishConfig.access: public`, MIT
-- tsdown build: ESM-only, `dts`, `sourcemap`, `target es2022`, `treeshake`, `minify`; `platform: neutral` (core-like) or `browser` (react-like)
+- tsdown build: ESM-only, `dts`, `sourcemap`, `target es2022`, `treeshake`, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build); `platform: neutral` (core-like) or `browser` (react-like)
 - `prepack`/`prepare` run the build; `typecheck` is `tsc --noEmit` against `@repo/typescript-config/{library,react-library}.json` and covers test files
 - Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset
 

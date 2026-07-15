@@ -8,10 +8,10 @@ import { SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
   description:
-    "Documentation for acme-package: the template for library monorepos — fork it, rename one scope, and publish.",
+    "Documentation for acme-package: the template for library monorepos. Fork it, rename one scope, and publish.",
   metadataBase: new URL(SITE_ORIGIN),
   title: {
-    default: "acme-package — library monorepo template",
+    default: "acme-package · library monorepo template",
     template: "%s · acme-package docs",
   },
 };
