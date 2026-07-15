@@ -24,13 +24,13 @@ Everything you must touch after forking, in order:
 
 2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
    **both** publishable packages, and:
-   - `GITHUB_URL` and `SITE_ORIGIN` in `apps/docs/lib/site.ts` — the single
+   - `GITHUB_URL` and `SITE_ORIGIN` in `apps/docs/lib/site.ts`, the single
      module every docs GitHub link and absolute page URL derives from.
    - the `nav.title` wordmark string in `apps/docs/lib/layout.shared.tsx`.
    - `metadata.title` and `metadata.description` in `apps/docs/app/layout.tsx`.
 
    The `repository.url` matters more than it looks: npm provenance validates
-   it against the repository that runs the publish — a renamed fork's first
+   it against the repository that runs the publish, so a renamed fork's first
    `release` fails if you skip this.
 
 3. **The portless name** in the docs dev script
@@ -42,7 +42,7 @@ Everything you must touch after forking, in order:
 
 Releases run through Changesets:
 
-1. `pnpm changeset` — describe the change and pick a bump for each affected
+1. `pnpm changeset`: describe the change and pick a bump for each affected
    package.
 2. CI's `release.yml` opens a "Version Packages" PR that applies the bumps and
    updates changelogs.
@@ -54,7 +54,7 @@ The workflow needs an `NPM_TOKEN` secret on the repository.
 
 Copy `packages/core` (or `packages/react` if the new package binds to React),
 then rename the `name` field in the copy's `package.json`.
-The package shape is the contract — keep it identical across packages:
+The package shape is the contract; keep it identical across packages:
 
 - `exports` map with `types` first
 - `"files": ["dist"]`

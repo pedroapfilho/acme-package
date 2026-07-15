@@ -20,8 +20,8 @@ Vite demo app that consume them the way your users would.
 ## Architecture
 
 The example domain is intentionally tiny: `createStore` in `@acme/core` and
-`useStore` in `@acme/react`. The point is not the store — it's the
-core→adapter layering most real libraries grow into: a framework-agnostic
+`useStore` in `@acme/react`. The point is the core→adapter layering most
+real libraries grow into: a framework-agnostic
 engine with zero dependencies, and a thin framework binding that depends on it
 and declares the framework as a peer. Keep that split and the rest of the
 template (builds, tests, releases) keeps working as you swap in your real
