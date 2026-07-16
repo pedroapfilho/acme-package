@@ -1,5 +1,12 @@
 "use client";
-import * as React from "react";
+import {
+  type ComponentPropsWithRef,
+  createContext,
+  type ReactNode,
+  use,
+  useId,
+  useMemo,
+} from "react";
 
 import { cn } from "../../lib/cn";
 
@@ -7,20 +14,20 @@ type PopoverContextValue = {
   popoverId: string;
 };
 
-const PopoverContext = React.createContext<PopoverContextValue | null>(null);
+const PopoverContext = createContext<PopoverContextValue | null>(null);
 
-const Popover = ({ children }: { children: React.ReactNode }) => {
-  const rawId = React.useId();
+const Popover = ({ children }: { children: ReactNode }) => {
+  const rawId = useId();
   // useId returns ":r0:" style strings; strip colons for a valid HTML id
   const popoverId = `fd-popover-${rawId.replaceAll(":", "")}`;
-  const contextValue = React.useMemo(() => ({ popoverId }), [popoverId]);
+  const contextValue = useMemo(() => ({ popoverId }), [popoverId]);
   return <PopoverContext value={contextValue}>{children}</PopoverContext>;
 };
 
-type PopoverTriggerProps = React.ComponentPropsWithRef<"button">;
+type PopoverTriggerProps = ComponentPropsWithRef<"button">;
 
 const PopoverTrigger = ({ children, className, ...props }: PopoverTriggerProps) => {
-  const ctx = React.use(PopoverContext);
+  const ctx = use(PopoverContext);
   if (!ctx) {
     throw new Error("PopoverTrigger must be used inside Popover");
   }
@@ -36,10 +43,10 @@ const PopoverTrigger = ({ children, className, ...props }: PopoverTriggerProps) 
   );
 };
 
-type PopoverContentProps = React.ComponentPropsWithRef<"div">;
+type PopoverContentProps = ComponentPropsWithRef<"div">;
 
 const PopoverContent = ({ children, className, ...props }: PopoverContentProps) => {
-  const ctx = React.use(PopoverContext);
+  const ctx = use(PopoverContext);
   if (!ctx) {
     throw new Error("PopoverContent must be used inside Popover");
   }
