@@ -11,8 +11,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { AnthropicIcon, CursorIcon, GitHubIcon, OpenAiIcon, SciraIcon } from "./provider-icons";
 
-const cache = new Map<string, Promise<string>>();
-
 const MarkdownCopyButton = ({
   markdownUrl,
   ...props
@@ -24,13 +22,6 @@ const MarkdownCopyButton = ({
   const [checked, onClick] = useCopyButton(() => {
     startTransition(async () => {
       try {
-        const cached = cache.get(markdownUrl);
-        if (cached) {
-          await navigator.clipboard.writeText(await cached);
-          setHasCopyError(false);
-          return;
-        }
-
         const promise = (async () => {
           const res = await fetch(markdownUrl);
           if (!res.ok) {
@@ -38,7 +29,6 @@ const MarkdownCopyButton = ({
           }
           return res.text();
         })();
-        cache.set(markdownUrl, promise);
         // ClipboardItem accepts the unsettled promise so the write stays inside the user gesture (Safari)
         await navigator.clipboard.write([
           new ClipboardItem({
@@ -47,9 +37,6 @@ const MarkdownCopyButton = ({
         ]);
         setHasCopyError(false);
       } catch {
-        // fetch and clipboard failures both land here: evict so a retry refetches
-        // instead of replaying a rejected cached promise
-        cache.delete(markdownUrl);
         setHasCopyError(true);
       }
     });

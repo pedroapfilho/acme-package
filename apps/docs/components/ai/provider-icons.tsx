@@ -6,13 +6,7 @@ const GitHubIcon = () => (
 );
 
 const SciraIcon = () => (
-  <svg
-    fill="none"
-    height="934"
-    viewBox="0 0 910 934"
-    width="910"
-    xmlns="http://www.w3.org/2000/svg"
-  >
+  <svg fill="none" viewBox="0 0 910 934" xmlns="http://www.w3.org/2000/svg">
     <title>Scira AI</title>
     <path
       d="M647.7 197.8C569.1 189 525.5 145.4 516.8 66.9C508 145.4 464.4 189 385.9 197.8C464.4 206.5 508 250.1 516.8 328.7C525.5 250.1 569.1 206.5 647.7 197.8Z"
