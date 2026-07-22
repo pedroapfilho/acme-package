@@ -10,7 +10,7 @@ describe("createStore", () => {
 
   it("set replaces the state and notifies subscribers", () => {
     const store = createStore(0);
-    const listener = vi.fn();
+    const listener = vi.fn<() => void>();
     store.subscribe(listener);
 
     store.set(1);
@@ -29,7 +29,7 @@ describe("createStore", () => {
 
   it("unsubscribe stops notifications", () => {
     const store = createStore(0);
-    const listener = vi.fn();
+    const listener = vi.fn<() => void>();
     const unsubscribe = store.subscribe(listener);
 
     unsubscribe();
@@ -40,7 +40,7 @@ describe("createStore", () => {
 
   it("skips notification when the next state is Object.is-equal", () => {
     const store = createStore(1);
-    const listener = vi.fn();
+    const listener = vi.fn<() => void>();
     store.subscribe(listener);
 
     store.set(1);
@@ -50,7 +50,7 @@ describe("createStore", () => {
 
   it("a listener that unsubscribes itself does not block other listeners", () => {
     const store = createStore(0);
-    const second = vi.fn();
+    const second = vi.fn<() => void>();
     const unsubscribeFirst = store.subscribe(() => {
       unsubscribeFirst();
     });

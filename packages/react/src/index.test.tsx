@@ -20,7 +20,12 @@ const Counter = ({ serverSnapshot, store }: CounterProps) => {
     serverSnapshot === undefined ? undefined : { getServerSnapshot: () => serverSnapshot },
   );
   return (
-    <button onClick={() => store.set((previous) => previous + 1)} type="button">
+    <button
+      onClick={() => {
+        store.set((previous) => previous + 1);
+      }}
+      type="button"
+    >
       count: {count}
     </button>
   );
@@ -63,7 +68,7 @@ describe("useStore", () => {
       <Counter serverSnapshot={serverSnapshot} store={serverStore} />,
     );
     const clientStore = counterStore();
-    const onRecoverableError = vi.fn();
+    const onRecoverableError = vi.fn<() => void>();
     let root: ReturnType<typeof hydrateRoot> | undefined;
 
     act(() => {
@@ -76,7 +81,9 @@ describe("useStore", () => {
 
     expect(onRecoverableError).not.toHaveBeenCalled();
 
-    act(() => clientStore.set(1));
+    act(() => {
+      clientStore.set(1);
+    });
     expect(container).toHaveTextContent("count: 1");
 
     act(() => root?.unmount());
