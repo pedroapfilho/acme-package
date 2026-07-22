@@ -8,17 +8,20 @@ type Store<T> = {
   subscribe: (listener: Listener) => () => void;
 };
 
+// typeof can't narrow `T | ((previous: T) => T)` when T itself is a
+// function type: function-valued state must use set(() => fn), the
+// same caveat zustand documents.
+const isUpdaterFunction = <T>(value: Updater<T>): value is (previous: T) => T =>
+  typeof value === "function";
+
 const createStore = <T>(initial: T): Store<T> => {
   let state = initial;
   const listeners = new Set<Listener>();
 
   return {
     get: () => state,
-    set: (next) => {
-      // typeof can't narrow `T | ((previous: T) => T)` when T itself is a
-      // function type: function-valued state must use set(() => fn), the
-      // same caveat zustand documents.
-      const value = typeof next === "function" ? (next as (previous: T) => T)(state) : next;
+    set: (updater) => {
+      const value = isUpdaterFunction(updater) ? updater(state) : updater;
       if (Object.is(value, state)) {
         return;
       }
