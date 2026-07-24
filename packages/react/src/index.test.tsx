@@ -68,7 +68,7 @@ describe("useStore", () => {
       <Counter serverSnapshot={serverSnapshot} store={serverStore} />,
     );
     const clientStore = counterStore();
-    const onRecoverableError = vi.fn<() => void>();
+    const onRecoverableError = vi.fn<(error: unknown, errorInfo: unknown) => void>();
     let root: ReturnType<typeof hydrateRoot> | undefined;
 
     act(() => {
