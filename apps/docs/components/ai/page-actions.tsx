@@ -84,16 +84,20 @@ const ViewOptionsPopover = ({
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 
     return [
-      githubUrl && {
-        href: githubUrl,
-        icon: <GitHubIcon />,
-        title: "Open in GitHub",
-      },
-      markdownUrl && {
-        href: markdownUrl,
-        icon: <TextIcon />,
-        title: "View as Markdown",
-      },
+      githubUrl === undefined || githubUrl === ""
+        ? undefined
+        : {
+            href: githubUrl,
+            icon: <GitHubIcon />,
+            title: "Open in GitHub",
+          },
+      markdownUrl === undefined || markdownUrl === ""
+        ? undefined
+        : {
+            href: markdownUrl,
+            icon: <TextIcon />,
+            title: "View as Markdown",
+          },
       {
         href: `https://scira.ai/?${new URLSearchParams({
           q,
@@ -123,7 +127,7 @@ const ViewOptionsPopover = ({
         icon: <CursorIcon />,
         title: "Open in Cursor",
       },
-    ].filter((v) => !!v);
+    ].filter((v) => v !== undefined);
   }, [githubUrl, markdownUrl, pathname]);
 
   return (

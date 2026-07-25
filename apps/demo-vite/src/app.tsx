@@ -7,7 +7,12 @@ const App = () => {
 
   return (
     <main>
-      <button onClick={() => countStore.set((previous) => previous + 1)} type="button">
+      <button
+        onClick={() => {
+          countStore.set((previous) => previous + 1);
+        }}
+        type="button"
+      >
         count is {count}
       </button>
     </main>
