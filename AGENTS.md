@@ -10,7 +10,7 @@ The **library-monorepo template**, and the source of truth for the fleet's `libr
 
 ```
 packages/
-  config-typescript/   @repo/typescript-config (tsconfig presets: base/library/react-library/vite/nextjs)
+  config-typescript/   @repo/typescript-config (tsconfig presets: base/react-library/vite/nextjs)
   config-vitest/       @repo/config-vitest (vitest presets: node/react + coverage thresholds)
   core/                @acme/core (publishable, platform-neutral example lib)
   react/               @acme/react (publishable React adapter, peer react ^18.3.1 || ^19)
@@ -29,7 +29,7 @@ Every publishable package keeps the same shape; copy `packages/core` to add one:
 
 - `exports: { ".": { types, default } }`, `files: ["dist"]`, `sideEffects: false`, `publishConfig.access: public`, MIT
 - tsdown build: ESM-only, `dts`, `sourcemap`, `target es2022`, `treeshake`, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build); `platform: neutral` (core-like) or `browser` (react-like)
-- `prepack`/`prepare` run the build; `typecheck` is `tsc --noEmit` against `@repo/typescript-config/{library,react-library}.json` and covers test files
+- `prepack` runs the build (turbo owns ordering everywhere else, so there is no `prepare` build); `typecheck` is `tsc --noEmit` against `@repo/typescript-config/{base,react-library}.json` and covers test files
 - Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset
 
 ## Publishing
@@ -40,11 +40,11 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 
 - kebab-case filenames; oxlint (`oxlint-config-awesomeness`) + oxfmt; no ESLint/Prettier
 - `type` over `interface`, arrow functions, exports at end, WHY-comments only
-- Node ≥24, pnpm 11.1.3 (pinned `packageManager`)
+- Node ≥24, pnpm 11.13.1 (pinned `packageManager`)
 - No e2e/Playwright by design (library profile). The demo is a dev playground, not a test harness.
 
 ## Notable decisions
 
 - `@acme/*` is the placeholder publish scope; forks rename it once (README → "Use this template", docs → "Using this template"). `@repo/*` configs are never renamed.
-- CI is test/lint/format/fallow (+ release) on actions @v6, the library-profile standard, plus a react-doctor scan (PRs and pushes to main).
-- This repo is registered in the orchestrator (`~/dev/orchestrator`) as `LIBRARY_SOURCE_OF_TRUTH`; tsconfig (`base.json`/`library.json`) and root devDependency versions are verifier baselines for the fleet's library repos. Change them deliberately.
+- Seven workflows gate PRs on actions @v6: test/lint/format/fallow (the library-profile standard) plus build, typecheck and a react-doctor scan. `release.yml` is the eighth, on pushes to main only.
+- This repo is registered in the orchestrator (`~/dev/orchestrator`) as `LIBRARY_SOURCE_OF_TRUTH`; tsconfig (`base.json`) and root devDependency versions are verifier baselines for the fleet's library repos. Change them deliberately.

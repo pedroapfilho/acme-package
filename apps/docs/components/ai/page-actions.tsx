@@ -2,21 +2,38 @@
 import { usePathname } from "fumadocs-core/framework";
 import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
-import { type ComponentProps, useMemo, useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 
-import { cn } from "../../lib/cn";
 import { SITE_ORIGIN } from "../../lib/site";
 import { buttonVariants } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { AnthropicIcon, CursorIcon, GitHubIcon, OpenAiIcon, SciraIcon } from "./provider-icons";
 
-const MarkdownCopyButton = ({
-  markdownUrl,
-  ...props
-}: ComponentProps<"button"> & {
-  markdownUrl: string;
-}) => {
+const AI_PROVIDERS = [
+  {
+    buildHref: (q: string) => `https://scira.ai/?${new URLSearchParams({ q })}`,
+    icon: <SciraIcon />,
+    title: "Open in Scira AI",
+  },
+  {
+    buildHref: (q: string) => `https://chatgpt.com/?${new URLSearchParams({ hints: "search", q })}`,
+    icon: <OpenAiIcon />,
+    title: "Open in ChatGPT",
+  },
+  {
+    buildHref: (q: string) => `https://claude.ai/new?${new URLSearchParams({ q })}`,
+    icon: <AnthropicIcon />,
+    title: "Open in Claude",
+  },
+  {
+    buildHref: (q: string) => `https://cursor.com/link/prompt?${new URLSearchParams({ text: q })}`,
+    icon: <CursorIcon />,
+    title: "Open in Cursor",
+  },
+];
+
+const MarkdownCopyButton = ({ markdownUrl }: { markdownUrl: string }) => {
   const [isPending, startTransition] = useTransition();
   const [hasCopyError, setHasCopyError] = useState(false);
   const [checked, onClick] = useCopyButton(() => {
@@ -48,35 +65,27 @@ const MarkdownCopyButton = ({
 
   return (
     <button
+      className={buttonVariants({
+        className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-fd-muted-foreground",
+        color: "secondary",
+        size: "sm",
+      })}
       disabled={isPending}
       onClick={onClick}
       type="button"
-      {...props}
-      className={cn(
-        buttonVariants({
-          className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-fd-muted-foreground",
-          color: "secondary",
-          size: "sm",
-        }),
-        props.className,
-      )}
     >
       {showSuccessCheck ? <Check /> : <Copy />}
-      <span aria-live="polite">
-        {hasCopyError ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
-      </span>
+      <span aria-live="polite">{hasCopyError ? "Copy failed. Try again" : "Copy Markdown"}</span>
     </button>
   );
 };
 
-const ViewOptionsPopover = ({
-  githubUrl,
-  markdownUrl,
-  ...props
-}: ComponentProps<"button"> & {
-  githubUrl?: string;
-  markdownUrl?: string;
-}) => {
+type ViewOptionsPopoverProps = {
+  githubUrl: string;
+  markdownUrl: string;
+};
+
+const ViewOptionsPopover = ({ githubUrl, markdownUrl }: ViewOptionsPopoverProps) => {
   const pathname = usePathname();
   const items = useMemo(() => {
     // built from the canonical origin so server and client render identical hrefs (no hydration mismatch)
@@ -84,66 +93,18 @@ const ViewOptionsPopover = ({
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 
     return [
-      githubUrl === undefined || githubUrl === ""
-        ? undefined
-        : {
-            href: githubUrl,
-            icon: <GitHubIcon />,
-            title: "Open in GitHub",
-          },
-      markdownUrl === undefined || markdownUrl === ""
-        ? undefined
-        : {
-            href: markdownUrl,
-            icon: <TextIcon />,
-            title: "View as Markdown",
-          },
-      {
-        href: `https://scira.ai/?${new URLSearchParams({
-          q,
-        })}`,
-        icon: <SciraIcon />,
-        title: "Open in Scira AI",
-      },
-      {
-        href: `https://chatgpt.com/?${new URLSearchParams({
-          hints: "search",
-          q,
-        })}`,
-        icon: <OpenAiIcon />,
-        title: "Open in ChatGPT",
-      },
-      {
-        href: `https://claude.ai/new?${new URLSearchParams({
-          q,
-        })}`,
-        icon: <AnthropicIcon />,
-        title: "Open in Claude",
-      },
-      {
-        href: `https://cursor.com/link/prompt?${new URLSearchParams({
-          text: q,
-        })}`,
-        icon: <CursorIcon />,
-        title: "Open in Cursor",
-      },
-    ].filter((v) => v !== undefined);
+      { href: githubUrl, icon: <GitHubIcon />, title: "Open in GitHub" },
+      { href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" },
+      ...AI_PROVIDERS.map(({ buildHref, icon, title }) => ({ href: buildHref(q), icon, title })),
+    ];
   }, [githubUrl, markdownUrl, pathname]);
 
   return (
     <Popover>
       <PopoverTrigger
-        {...props}
-        className={cn(
-          buttonVariants({
-            color: "secondary",
-            size: "sm",
-          }),
-          "gap-2",
-          props.className,
-        )}
+        className={buttonVariants({ className: "gap-2", color: "secondary", size: "sm" })}
       >
-        {props.children ?? "Open"}
+        Open
         <ChevronDown className="text-fd-muted-foreground size-3.5" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">

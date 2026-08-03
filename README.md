@@ -58,4 +58,4 @@ Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `
 
 ## Stack
 
-pnpm 11.1.3 (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 4 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
+pnpm 11.13.1 (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 4 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
