@@ -18,3 +18,4 @@ jobs:
           runtime: node@24
           cache: true
       - run: pnpm build
+# probe: temporary branch to verify workflow_dispatch surfaces PR checks
