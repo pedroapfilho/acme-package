@@ -1,0 +1,14 @@
+name: Probe Dispatch
+on:
+  push:
+    branches: [changeset-release/main-probe]
+permissions:
+  contents: read
+  actions: write
+jobs:
+  dispatch:
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run build.yml --repo "$GITHUB_REPOSITORY" --ref changeset-release/main-probe
