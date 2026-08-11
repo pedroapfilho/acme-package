@@ -8,9 +8,6 @@ type Store<T> = {
   subscribe: (listener: Listener) => () => void;
 };
 
-// typeof can't narrow `T | ((previous: T) => T)` when T itself is a
-// function type: function-valued state must use set(() => fn), the
-// same caveat zustand documents.
 const isUpdaterFunction = <T>(value: Updater<T>): value is (previous: T) => T =>
   typeof value === "function";
 

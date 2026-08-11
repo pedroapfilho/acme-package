@@ -46,7 +46,6 @@ const MarkdownCopyButton = ({ markdownUrl }: { markdownUrl: string }) => {
           }
           return res.text();
         })();
-        // ClipboardItem accepts the unsettled promise so the write stays inside the user gesture (Safari)
         await navigator.clipboard.write([
           new ClipboardItem({
             "text/plain": promise,
@@ -59,8 +58,6 @@ const MarkdownCopyButton = ({ markdownUrl }: { markdownUrl: string }) => {
     });
   });
 
-  // useCopyButton flips checked in a microtask, before the transition settles;
-  // only show the check once the copy actually finished and succeeded
   const showSuccessCheck = checked && !isPending && !hasCopyError;
 
   return (
@@ -88,7 +85,6 @@ type ViewOptionsPopoverProps = {
 const ViewOptionsPopover = ({ githubUrl, markdownUrl }: ViewOptionsPopoverProps) => {
   const pathname = usePathname();
   const items = useMemo(() => {
-    // built from the canonical origin so server and client render identical hrefs (no hydration mismatch)
     const pageUrl = new URL(pathname, SITE_ORIGIN);
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 

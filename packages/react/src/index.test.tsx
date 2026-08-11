@@ -51,10 +51,6 @@ describe("useStore", () => {
 
     const html = renderToString(<Counter store={store} />);
 
-    // React separates the static "count: " text from the dynamic value with a
-    // comment marker on the server, so assert the rendered value, not the joined
-    // string: getServerSnapshot must surface the store's current 7, not the
-    // default 0.
     expect(html).toContain("count: <!-- -->7");
     expect(html).not.toContain("count: <!-- -->0");
   });
