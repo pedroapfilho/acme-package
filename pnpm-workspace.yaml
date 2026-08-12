@@ -35,7 +35,7 @@ minimumReleaseAgeExclude:
   - "@oxlint/binding-win32-x64-msvc@1.75.0"
   - oxlint-tsgolint@7.0.2001
   - oxlint@1.75.0
-  - oxlint-config-awesomeness@3.3.0
+  - oxlint-config-awesomeness@3.4.2
   - oxlint-plugin-react-doctor@0.9.6
 
 onlyBuiltDependencies:
