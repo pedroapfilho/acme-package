@@ -1,9 +1,9 @@
 "use client";
 import { usePathname } from "fumadocs-core/framework";
-import { useCopyButton } from "fumadocs-ui/utils/use-copy-button";
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
-import { useMemo, useState, useTransition } from "react";
+import { type ComponentProps, useEffect, useMemo, useRef, useState, useTransition } from "react";
 
+import { cn } from "../../lib/cn";
 import { SITE_ORIGIN } from "../../lib/site";
 import { buttonVariants } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
@@ -33,64 +33,104 @@ const AI_PROVIDERS = [
   },
 ];
 
-const MarkdownCopyButton = ({ markdownUrl }: { markdownUrl: string }) => {
+const markdownCache = new Map<string, Promise<string>>();
+type CopyStatus = "copied" | "failed" | "idle";
+
+const MarkdownCopyButton = ({
+  markdownUrl,
+  ...props
+}: ComponentProps<"button"> & { markdownUrl: string }) => {
   const [isPending, startTransition] = useTransition();
-  const [hasCopyError, setHasCopyError] = useState(false);
-  const [checked, onClick] = useCopyButton(() => {
+  const [status, setStatus] = useState<CopyStatus>("idle");
+  const timeoutRef = useRef<number | undefined>(undefined);
+
+  useEffect(
+    () => () => {
+      window.clearTimeout(timeoutRef.current);
+    },
+    [],
+  );
+
+  const showStatus = (next: Exclude<CopyStatus, "idle">): void => {
+    setStatus(next);
+    window.clearTimeout(timeoutRef.current);
+    timeoutRef.current = window.setTimeout(() => {
+      setStatus("idle");
+    }, 1500);
+  };
+
+  const handleClick = (): void => {
     startTransition(async () => {
-      try {
-        const promise = (async () => {
-          const res = await fetch(markdownUrl);
-          if (!res.ok) {
-            throw new Error(`Failed to fetch ${markdownUrl}: ${res.status}`);
+      const cached = markdownCache.get(markdownUrl);
+      const markdown =
+        cached ??
+        (async () => {
+          const response = await fetch(markdownUrl);
+          if (!response.ok) {
+            throw new Error(`fetching ${markdownUrl} failed with ${response.status}`);
           }
-          return res.text();
+          return response.text();
         })();
+      markdownCache.set(markdownUrl, markdown);
+      try {
         await navigator.clipboard.write([
           new ClipboardItem({
-            "text/plain": promise,
+            "text/plain": markdown,
           }),
         ]);
-        setHasCopyError(false);
-      } catch {
-        setHasCopyError(true);
+        showStatus("copied");
+      } catch (error) {
+        try {
+          await markdown;
+        } catch {
+          markdownCache.delete(markdownUrl);
+        }
+        showStatus("failed");
+        console.warn(`[acme-package docs] copying ${markdownUrl} failed`, error);
       }
     });
-  });
-
-  const showSuccessCheck = checked && !isPending && !hasCopyError;
+  };
 
   return (
     <button
-      className={buttonVariants({
-        className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-fd-muted-foreground",
-        color: "secondary",
-        size: "sm",
-      })}
       disabled={isPending}
-      onClick={onClick}
+      onClick={handleClick}
       type="button"
+      {...props}
+      className={cn(
+        buttonVariants({
+          className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-fd-muted-foreground",
+          color: "secondary",
+          size: "sm",
+        }),
+        props.className,
+      )}
     >
-      {showSuccessCheck ? <Check /> : <Copy />}
-      <span aria-live="polite">{hasCopyError ? "Copy failed. Try again" : "Copy Markdown"}</span>
+      {status === "copied" ? <Check /> : <Copy />}
+      <span aria-live="polite">
+        {status === "failed" ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
+      </span>
     </button>
   );
 };
 
-type ViewOptionsPopoverProps = {
-  githubUrl: string;
-  markdownUrl: string;
-};
-
-const ViewOptionsPopover = ({ githubUrl, markdownUrl }: ViewOptionsPopoverProps) => {
+const ViewOptionsPopover = ({
+  githubUrl,
+  markdownUrl,
+  ...props
+}: ComponentProps<"button"> & { githubUrl?: string; markdownUrl?: string }) => {
   const pathname = usePathname();
   const items = useMemo(() => {
     const pageUrl = new URL(pathname, SITE_ORIGIN);
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 
     return [
-      { href: githubUrl, icon: <GitHubIcon />, title: "Open in GitHub" },
-      { href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" },
+      ...(githubUrl !== undefined && githubUrl !== ""
+        ? [{ href: githubUrl, icon: <GitHubIcon />, title: "Open in GitHub" }]
+        : []),
+      ...(markdownUrl !== undefined && markdownUrl !== ""
+        ? [{ href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" }]
+        : []),
       ...AI_PROVIDERS.map(({ buildHref, icon, title }) => ({ href: buildHref(q), icon, title })),
     ];
   }, [githubUrl, markdownUrl, pathname]);
@@ -98,9 +138,13 @@ const ViewOptionsPopover = ({ githubUrl, markdownUrl }: ViewOptionsPopoverProps)
   return (
     <Popover>
       <PopoverTrigger
-        className={buttonVariants({ className: "gap-2", color: "secondary", size: "sm" })}
+        {...props}
+        className={cn(
+          buttonVariants({ className: "gap-2", color: "secondary", size: "sm" }),
+          props.className,
+        )}
       >
-        Open
+        {props.children ?? "Open"}
         <ChevronDown className="text-fd-muted-foreground size-3.5" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
