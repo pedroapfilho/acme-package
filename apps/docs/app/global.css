@@ -37,32 +37,41 @@ button[data-toc-popover-trigger] {
 }
 
 :root {
+  --background: var(--color-fd-background);
+  --foreground: var(--color-fd-foreground);
   --primary: oklch(0.205 0 0);
+  --primary-foreground: var(--color-fd-primary-foreground);
+  --muted-foreground: var(--color-fd-muted-foreground);
+  --border: var(--color-fd-border);
+  --ring: var(--color-fd-ring);
 }
 
 .dark {
   --primary: oklch(0.985 0 0);
 }
 
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
+
 .library-blueprint {
   display: grid;
   gap: 2rem;
   margin-block: 1rem 4rem;
-  border: 1px solid var(--color-fd-border);
-  background-color: var(--color-fd-background);
+  border: 1px solid var(--border);
+  background-color: var(--background);
   background-image:
-    linear-gradient(
-      color-mix(in oklch, var(--color-fd-border) 50%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in oklch, var(--color-fd-border) 50%, transparent) 1px,
-      transparent 1px
-    );
+    linear-gradient(color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px);
   background-size: 2rem 2rem;
   padding: clamp(1.5rem, 4vw, 3rem);
-  color: var(--color-fd-foreground);
+  color: var(--foreground);
 }
 
 .library-blueprint__copy h2 {
@@ -78,7 +87,7 @@ button[data-toc-popover-trigger] {
 .library-blueprint__copy > p:not(.library-eyebrow) {
   max-width: 52ch;
   margin-top: 1.25rem;
-  color: var(--color-fd-muted-foreground);
+  color: var(--muted-foreground);
   font-size: 1.05rem;
 }
 
@@ -108,7 +117,7 @@ button[data-toc-popover-trigger] {
 
 .library-actions a:first-child {
   background: var(--primary);
-  color: var(--color-fd-primary-foreground);
+  color: var(--primary-foreground);
 }
 
 .library-map {
@@ -122,8 +131,8 @@ button[data-toc-popover-trigger] {
   position: relative;
   display: grid;
   gap: 0.4rem;
-  border: 1px solid var(--color-fd-border);
-  background: var(--color-fd-background);
+  border: 1px solid var(--border);
+  background: var(--background);
   padding: 1rem;
 }
 
@@ -135,7 +144,7 @@ button[data-toc-popover-trigger] {
 
 .library-map small,
 .release-track small {
-  color: var(--color-fd-muted-foreground);
+  color: var(--muted-foreground);
 }
 
 .library-map li + li::before {
@@ -151,12 +160,12 @@ button[data-toc-popover-trigger] {
   display: grid;
   gap: 1px;
   overflow: hidden;
-  border: 1px solid var(--color-fd-border);
-  background: var(--color-fd-border);
+  border: 1px solid var(--border);
+  background: var(--border);
 }
 
 .library-capabilities div {
-  background: var(--color-fd-background);
+  background: var(--background);
   padding: 1.5rem;
 }
 
@@ -167,21 +176,21 @@ button[data-toc-popover-trigger] {
 
 .library-capabilities dd {
   margin-top: 0.65rem;
-  color: var(--color-fd-muted-foreground);
+  color: var(--muted-foreground);
 }
 
 .release-track {
   display: grid;
   gap: 1px;
   overflow: hidden;
-  border: 1px solid var(--color-fd-border);
-  background: var(--color-fd-border);
+  border: 1px solid var(--border);
+  background: var(--border);
 }
 
 .release-track li {
   display: grid;
   gap: 0.55rem;
-  background: var(--color-fd-background);
+  background: var(--background);
   padding: 1.25rem;
 }
 

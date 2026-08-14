@@ -22,7 +22,7 @@ const baseOptions = (): BaseLayoutProps => ({
   nav: {
     title: (
       <span className="inline-flex items-center gap-2 font-mono font-semibold tracking-tight">
-        <span aria-hidden="true" className="bg-fd-primary size-2.5" />
+        <span aria-hidden="true" className="bg-primary size-2.5" />
         acme/package
       </span>
     ),
