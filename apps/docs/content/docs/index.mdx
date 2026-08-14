@@ -1,28 +1,88 @@
 ---
-title: Introduction
-description: acme-package is the template for library monorepos. Fork it, rename one scope, and publish.
+title: The clean room for TypeScript libraries
+description: Fork a publish-ready monorepo with the package boundaries, tests, docs, demo, and release path already connected.
+full: true
 ---
 
-acme-package is a fork-ready monorepo for published TypeScript libraries. It
-ships two example packages that exercise everything a real library needs:
-ESM-only tsdown builds, type declarations, Vitest test suites, peer
-dependencies, and Changesets releases. It also includes this docs site and a
-Vite demo app that consume them the way your users would.
+<section className="library-blueprint not-prose">
+  <div className="library-blueprint__copy">
+    <p className="library-eyebrow">LIBRARY SYSTEM / READY TO FORK</p>
+    <h2>Build the library. Keep the release machinery boring.</h2>
+    <p>{"acme-package gives a framework-agnostic core, a React adapter, a real consumer demo, and a Changesets release path in one small workspace."}</p>
+    <div className="library-actions">
+      <a href="/using-this-template">Use the template</a>
+      <a href="https://github.com/pedroapfilho/acme-package">Inspect the source</a>
+    </div>
+  </div>
 
-## What's inside
+  <ol className="library-map" aria-label="Package dependency map">
+    <li>
+      <span>01</span>
+      <strong>@acme/core</strong>
+      <small>zero dependencies</small>
+    </li>
+    <li>
+      <span>02</span>
+      <strong>@acme/react</strong>
+      <small>peer-safe adapter</small>
+    </li>
+    <li>
+      <span>03</span>
+      <strong>docs + demo</strong>
+      <small>real consumers</small>
+    </li>
+  </ol>
+</section>
 
-| Package                                           | Role                                                                                      |
-| ------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `@acme/core`                                      | Framework-agnostic library. Zero dependencies, platform-neutral build, tests run in node. |
-| `@acme/react`                                     | React adapter. React as a peer dependency, platform-browser build, tests run in jsdom.    |
-| `@repo/typescript-config` + `@repo/config-vitest` | Internal presets shared across the workspace. Private, never published, never renamed.    |
+## Everything around the API is already working
 
-## Architecture
+<dl className="library-capabilities not-prose">
+  <div>
+    <dt>Build contracts</dt>
+    <dd>ESM-only tsdown output, declarations, platform targets, and package exports.</dd>
+  </div>
+  <div>
+    <dt>Two test environments</dt>
+    <dd>Node for the core package and jsdom for the React adapter.</dd>
+  </div>
+  <div>
+    <dt>Real consumption</dt>
+    <dd>A Vite demo and this docs app import the packages the same way users will.</dd>
+  </div>
+  <div>
+    <dt>Release discipline</dt>
+    <dd>Changesets, CI, package provenance, and one predictable publish command.</dd>
+  </div>
+</dl>
 
-The example domain is intentionally tiny: `createStore` in `@acme/core` and
-`useStore` in `@acme/react`. The point is the core→adapter layering most
-real libraries grow into: a framework-agnostic
-engine with zero dependencies, and a thin framework binding that depends on it
-and declares the framework as a peer. Keep that split and the rest of the
-template (builds, tests, releases) keeps working as you swap in your real
-code.
+## One release path, visible end to end
+
+<ol className="release-track not-prose">
+  <li>
+    <span>01</span>
+    <strong>Change</strong>
+    <small>work inside the package boundary</small>
+  </li>
+  <li>
+    <span>02</span>
+    <strong>Prove</strong>
+    <small>lint, typecheck, test, and build</small>
+  </li>
+  <li>
+    <span>03</span>
+    <strong>Describe</strong>
+    <small>add the Changeset with the code</small>
+  </li>
+  <li>
+    <span>04</span>
+    <strong>Publish</strong>
+    <small>version and ship every affected package</small>
+  </li>
+</ol>
+
+## A deliberately small example domain
+
+The template uses `createStore` in `@acme/core` and `useStore` in `@acme/react` to show the split
+most libraries grow into: a platform-neutral engine with zero dependencies, plus a thin framework
+binding that declares the framework as a peer. Replace that example with your own domain and keep
+the rest of the system intact.

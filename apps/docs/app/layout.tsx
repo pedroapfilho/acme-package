@@ -26,14 +26,22 @@ export const viewport: Viewport = {
 const RootLayout = ({ children }: { children: ReactNode }) => (
   <html lang="en" suppressHydrationWarning>
     <body className="flex min-h-screen flex-col">
+      <a
+        className="bg-fd-background text-fd-foreground ring-fd-ring fixed top-4 left-4 z-50 -translate-y-20 rounded-md px-4 py-2 opacity-0 ring-2 focus:translate-y-0 focus:opacity-100"
+        href="#main-content"
+      >
+        Skip to content
+      </a>
       <div
         aria-hidden="true"
         className="reading-progress-bar fixed top-0 left-0 z-50 h-0.5 w-full bg-(--primary) [animation-range:0%_100%]"
       />
-      {/* Static search keeps the docs deployable without a search backend; the
-          non-deprecated path is a custom search dialog this template avoids owning. */}
-      {/* oxlint-disable-next-line typescript/no-deprecated */}
-      <RootProvider search={{ options: { type: "static" } }}>{children}</RootProvider>
+      <div className="contents" id="main-content">
+        {/* Static search keeps the docs deployable without a search backend; the
+            non-deprecated path is a custom search dialog this template avoids owning. */}
+        {/* oxlint-disable-next-line typescript/no-deprecated */}
+        <RootProvider search={{ options: { type: "static" } }}>{children}</RootProvider>
+      </div>
     </body>
   </html>
 );
