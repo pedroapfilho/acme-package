@@ -27,6 +27,7 @@
 }
 
 @source "../node_modules/fumadocs-ui/dist/**/*.js";
+@source "../content";
 
 html {
   scrollbar-gutter: stable;
@@ -42,6 +43,8 @@ button[data-toc-popover-trigger] {
   --primary: oklch(0.205 0 0);
   --primary-foreground: var(--color-fd-primary-foreground);
   --muted-foreground: var(--color-fd-muted-foreground);
+  --accent: var(--color-fd-accent);
+  --accent-foreground: var(--color-fd-accent-foreground);
   --border: var(--color-fd-border);
   --ring: var(--color-fd-ring);
 }
@@ -56,162 +59,15 @@ button[data-toc-popover-trigger] {
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
   --color-border: var(--border);
   --color-ring: var(--ring);
 }
 
-.library-blueprint {
-  display: grid;
-  gap: 2rem;
-  margin-block: 1rem 4rem;
-  border: 1px solid var(--border);
-  background-color: var(--background);
+@utility blueprint-grid {
   background-image:
     linear-gradient(color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px);
   background-size: 2rem 2rem;
-  padding: clamp(1.5rem, 4vw, 3rem);
-  color: var(--foreground);
-}
-
-.library-blueprint__copy h2 {
-  max-width: 16ch;
-  margin-top: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: clamp(2rem, 5vw, 3.75rem);
-  font-weight: 650;
-  letter-spacing: -0.05em;
-  line-height: 1;
-}
-
-.library-blueprint__copy > p:not(.library-eyebrow) {
-  max-width: 52ch;
-  margin-top: 1.25rem;
-  color: var(--muted-foreground);
-  font-size: 1.05rem;
-}
-
-.library-eyebrow {
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.75rem;
-  font-weight: 650;
-  letter-spacing: 0.12em;
-}
-
-.library-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
-}
-
-.library-actions a {
-  border: 1px solid var(--primary);
-  padding: 0.65rem 0.9rem;
-  color: var(--primary);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  font-weight: 650;
-}
-
-.library-actions a:first-child {
-  background: var(--primary);
-  color: var(--primary-foreground);
-}
-
-.library-map {
-  display: grid;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-mono);
-}
-
-.library-map li {
-  position: relative;
-  display: grid;
-  gap: 0.4rem;
-  border: 1px solid var(--border);
-  background: var(--background);
-  padding: 1rem;
-}
-
-.library-map span,
-.release-track span {
-  color: var(--primary);
-  font-size: 0.7rem;
-}
-
-.library-map small,
-.release-track small {
-  color: var(--muted-foreground);
-}
-
-.library-map li + li::before {
-  position: absolute;
-  top: -1.15rem;
-  left: 50%;
-  content: "→";
-  color: var(--primary);
-  transform: translateX(-50%) rotate(90deg);
-}
-
-.library-capabilities {
-  display: grid;
-  gap: 1px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--border);
-}
-
-.library-capabilities div {
-  background: var(--background);
-  padding: 1.5rem;
-}
-
-.library-capabilities dt {
-  font-family: var(--font-mono);
-  font-weight: 650;
-}
-
-.library-capabilities dd {
-  margin-top: 0.65rem;
-  color: var(--muted-foreground);
-}
-
-.release-track {
-  display: grid;
-  gap: 1px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  background: var(--border);
-}
-
-.release-track li {
-  display: grid;
-  gap: 0.55rem;
-  background: var(--background);
-  padding: 1.25rem;
-}
-
-.release-track strong {
-  font-family: var(--font-mono);
-}
-
-@media (min-width: 48rem) {
-  .library-blueprint {
-    grid-template-columns: 1.05fr 0.95fr;
-    align-items: center;
-  }
-
-  .library-capabilities,
-  .release-track {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 64rem) {
-  .release-track {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
 }

@@ -4,79 +4,131 @@ description: Fork a publish-ready monorepo with the package boundaries, tests, d
 full: true
 ---
 
-<section className="library-blueprint not-prose">
-  <div className="library-blueprint__copy">
-    <p className="library-eyebrow">LIBRARY SYSTEM / READY TO FORK</p>
-    <h2>Build the library. Keep the release machinery boring.</h2>
-    <p>{"acme-package gives a framework-agnostic core, a React adapter, a real consumer demo, and a Changesets release path in one small workspace."}</p>
-    <div className="library-actions">
-      <a href="/using-this-template">Use the template</a>
-      <a href="https://github.com/pedroapfilho/acme-package">Inspect the source</a>
-    </div>
-  </div>
+<div className="not-prose mt-8 flex flex-wrap gap-3">
+  <a
+    className="bg-primary text-primary-foreground focus-visible:ring-ring rounded-md px-3 py-2.5 text-base font-medium hover:bg-primary/90 focus-visible:ring-2 focus-visible:outline-none sm:py-2 sm:text-sm"
+    href="/using-this-template"
+  >
+    Use the template
+  </a>
+  <a
+    className="border-border hover:bg-accent hover:text-accent-foreground focus-visible:ring-ring rounded-md border px-3 py-2.5 text-base font-medium focus-visible:ring-2 focus-visible:outline-none sm:py-2 sm:text-sm"
+    href="https://github.com/pedroapfilho/acme-package"
+  >
+    Inspect the source
+  </a>
+</div>
 
-  <ol className="library-map" aria-label="Package dependency map">
-    <li>
-      <span>01</span>
-      <strong>@acme/core</strong>
-      <small>zero dependencies</small>
+<section
+  aria-labelledby="package-map-label"
+  className="not-prose blueprint-grid border-border bg-background mt-8 rounded-lg border p-6 sm:p-10"
+>
+  <p
+    className="text-primary font-mono text-sm font-medium tracking-wide uppercase"
+    id="package-map-label"
+  >
+    Package map
+  </p>
+
+  <ol className="mt-6 grid gap-8 sm:grid-cols-3 sm:gap-4" role="list">
+    <li className="border-border bg-background rounded-md border p-4">
+      <p className="text-primary font-mono text-sm tabular-nums">01</p>
+      <p className="mt-2 font-mono text-base font-medium">@acme/core</p>
+      <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+        Zero dependencies, platform-neutral
+      </p>
     </li>
-    <li>
-      <span>02</span>
-      <strong>@acme/react</strong>
-      <small>peer-safe adapter</small>
+    <li className="border-border bg-background relative rounded-md border p-4">
+      <span
+        aria-hidden="true"
+        className="text-primary absolute -top-4 left-1/2 -translate-1/2 rotate-90 sm:-left-2 sm:top-1/2 sm:rotate-0"
+      >
+        &rarr;
+      </span>
+      <p className="text-primary font-mono text-sm tabular-nums">02</p>
+      <p className="mt-2 font-mono text-base font-medium">@acme/react</p>
+      <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+        Thin adapter, React stays a peer
+      </p>
     </li>
-    <li>
-      <span>03</span>
-      <strong>docs + demo</strong>
-      <small>real consumers</small>
+    <li className="border-border bg-background relative rounded-md border p-4">
+      <span
+        aria-hidden="true"
+        className="text-primary absolute -top-4 left-1/2 -translate-1/2 rotate-90 sm:-left-2 sm:top-1/2 sm:rotate-0"
+      >
+        &rarr;
+      </span>
+      <p className="text-primary font-mono text-sm tabular-nums">03</p>
+      <p className="mt-2 font-mono text-base font-medium">docs + demo</p>
+      <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+        Real consumers, same imports as users
+      </p>
     </li>
   </ol>
 </section>
 
 ## Everything around the API is already working
 
-<dl className="library-capabilities not-prose">
-  <div>
-    <dt>Build contracts</dt>
-    <dd>ESM-only tsdown output, declarations, platform targets, and package exports.</dd>
+<dl className="not-prose bg-border border-border mt-6 grid gap-px overflow-hidden rounded-lg border sm:grid-cols-2">
+  <div className="bg-background p-6">
+    <dt className="text-foreground font-mono text-base font-medium">Build contracts</dt>
+    <dd className="text-muted-foreground mt-2 text-base text-pretty sm:text-sm">
+      ESM-only tsdown output, declarations, platform targets, and package exports.
+    </dd>
   </div>
-  <div>
-    <dt>Two test environments</dt>
-    <dd>Node for the core package and jsdom for the React adapter.</dd>
+  <div className="bg-background p-6">
+    <dt className="text-foreground font-mono text-base font-medium">Two test environments</dt>
+    <dd className="text-muted-foreground mt-2 text-base text-pretty sm:text-sm">
+      Node for the core package and jsdom for the React adapter.
+    </dd>
   </div>
-  <div>
-    <dt>Real consumption</dt>
-    <dd>A Vite demo and this docs app import the packages the same way users will.</dd>
+  <div className="bg-background p-6">
+    <dt className="text-foreground font-mono text-base font-medium">Real consumption</dt>
+    <dd className="text-muted-foreground mt-2 text-base text-pretty sm:text-sm">
+      A Vite demo and this docs app import the packages the same way users will.
+    </dd>
   </div>
-  <div>
-    <dt>Release discipline</dt>
-    <dd>Changesets, CI, package provenance, and one predictable publish command.</dd>
+  <div className="bg-background p-6">
+    <dt className="text-foreground font-mono text-base font-medium">Release discipline</dt>
+    <dd className="text-muted-foreground mt-2 text-base text-pretty sm:text-sm">
+      Changesets, CI, package provenance, and one predictable publish command.
+    </dd>
   </div>
 </dl>
 
 ## One release path, visible end to end
 
-<ol className="release-track not-prose">
-  <li>
-    <span>01</span>
-    <strong>Change</strong>
-    <small>work inside the package boundary</small>
+<ol
+  className="not-prose bg-border border-border mt-6 grid gap-px overflow-hidden rounded-lg border sm:grid-cols-2 lg:grid-cols-4"
+  role="list"
+>
+  <li className="bg-background p-6">
+    <p className="text-primary font-mono text-sm tabular-nums">01</p>
+    <p className="mt-2 font-mono text-base font-medium">Change</p>
+    <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+      Work inside the package boundary
+    </p>
   </li>
-  <li>
-    <span>02</span>
-    <strong>Prove</strong>
-    <small>lint, typecheck, test, and build</small>
+  <li className="bg-background p-6">
+    <p className="text-primary font-mono text-sm tabular-nums">02</p>
+    <p className="mt-2 font-mono text-base font-medium">Prove</p>
+    <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+      Lint, typecheck, test, and build
+    </p>
   </li>
-  <li>
-    <span>03</span>
-    <strong>Describe</strong>
-    <small>add the Changeset with the code</small>
+  <li className="bg-background p-6">
+    <p className="text-primary font-mono text-sm tabular-nums">03</p>
+    <p className="mt-2 font-mono text-base font-medium">Describe</p>
+    <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+      Add the Changeset with the code
+    </p>
   </li>
-  <li>
-    <span>04</span>
-    <strong>Publish</strong>
-    <small>version and ship every affected package</small>
+  <li className="bg-background p-6">
+    <p className="text-primary font-mono text-sm tabular-nums">04</p>
+    <p className="mt-2 font-mono text-base font-medium">Publish</p>
+    <p className="text-muted-foreground mt-1 text-base sm:text-sm">
+      Version and ship every affected package
+    </p>
   </li>
 </ol>
 

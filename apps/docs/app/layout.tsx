@@ -25,7 +25,7 @@ export const viewport: Viewport = {
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
   <html lang="en" suppressHydrationWarning>
-    <body className="flex min-h-screen flex-col">
+    <body className="flex min-h-dvh flex-col antialiased">
       <a
         className="bg-background text-foreground ring-ring fixed top-4 left-4 z-50 -translate-y-20 rounded-md px-4 py-2 opacity-0 ring-2 focus:translate-y-0 focus:opacity-100"
         href="#main-content"
