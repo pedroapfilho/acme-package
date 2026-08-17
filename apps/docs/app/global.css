@@ -7,20 +7,17 @@
 }
 
 .reading-progress-bar {
-  /* resting scaleX(0) keeps the bar invisible when reduced motion disables the animation */
   transform: scaleX(0);
   transform-origin: left;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  /* transform animates on the compositor; animating width would force layout every frame */
   @keyframes reading-progress {
     to {
       transform: scaleX(1);
     }
   }
 
-  /* without timeline support the 0s animation would fill straight to scaleX(1) and pin a full-width bar */
   @supports (animation-timeline: scroll()) {
     .reading-progress-bar {
       animation: reading-progress linear both;
@@ -30,15 +27,47 @@
 }
 
 @source "../node_modules/fumadocs-ui/dist/**/*.js";
+@source "../content";
 
 html {
   scrollbar-gutter: stable;
 }
 
+button[data-toc-popover-trigger] {
+  color: var(--color-fd-foreground);
+}
+
 :root {
+  --background: var(--color-fd-background);
+  --foreground: var(--color-fd-foreground);
   --primary: oklch(0.205 0 0);
+  --primary-foreground: var(--color-fd-primary-foreground);
+  --muted-foreground: var(--color-fd-muted-foreground);
+  --accent: var(--color-fd-accent);
+  --accent-foreground: var(--color-fd-accent-foreground);
+  --border: var(--color-fd-border);
+  --ring: var(--color-fd-ring);
 }
 
 .dark {
   --primary: oklch(0.985 0 0);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+}
+
+@utility blueprint-grid {
+  background-image:
+    linear-gradient(color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px);
+  background-size: 2rem 2rem;
 }
