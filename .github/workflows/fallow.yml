@@ -18,6 +18,6 @@ jobs:
           runtime: node@24
           cache: true
       # Dead-code analysis resolves workspace imports through built dist output,
-      # which no longer exists after a bare install.
-      - run: pnpm build:packages
+      # which no longer exists after a bare install. Mirrors .github/workflows/lint.yml.
+      - run: pnpm build --filter="./packages/*"
       - run: pnpm fallow:dead

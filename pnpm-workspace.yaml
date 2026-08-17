@@ -6,19 +6,37 @@ allowBuilds:
   esbuild: true
   sharp: true
 
-# Exempts the lint toolchain from the 24h minimumReleaseAge quarantine so it can be
-# bumped the day it ships. Per-tool rather than per-version: pinned versions went
-# stale on every bump (pnpm falls back silently rather than erroring), so the list
-# exempted nothing while reading as if it did. The trade is that these publishers
-# are trusted for all future versions, not re-approved per release.
 minimumReleaseAgeExclude:
-  - cnfast
-  - "@oxlint-tsgolint/*"
-  - "@oxlint/*"
-  - oxlint
-  - oxlint-config-awesomeness
-  - oxlint-plugin-react-doctor
-  - oxlint-tsgolint
+  - cnfast@0.0.8
+  - "@oxlint-tsgolint/darwin-arm64@7.0.2001"
+  - "@oxlint-tsgolint/darwin-x64@7.0.2001"
+  - "@oxlint-tsgolint/linux-arm64@7.0.2001"
+  - "@oxlint-tsgolint/linux-x64@7.0.2001"
+  - "@oxlint-tsgolint/win32-arm64@7.0.2001"
+  - "@oxlint-tsgolint/win32-x64@7.0.2001"
+  - "@oxlint/binding-android-arm-eabi@1.75.0"
+  - "@oxlint/binding-android-arm64@1.75.0"
+  - "@oxlint/binding-darwin-arm64@1.75.0"
+  - "@oxlint/binding-darwin-x64@1.75.0"
+  - "@oxlint/binding-freebsd-x64@1.75.0"
+  - "@oxlint/binding-linux-arm-gnueabihf@1.75.0"
+  - "@oxlint/binding-linux-arm-musleabihf@1.75.0"
+  - "@oxlint/binding-linux-arm64-gnu@1.75.0"
+  - "@oxlint/binding-linux-arm64-musl@1.75.0"
+  - "@oxlint/binding-linux-ppc64-gnu@1.75.0"
+  - "@oxlint/binding-linux-riscv64-gnu@1.75.0"
+  - "@oxlint/binding-linux-riscv64-musl@1.75.0"
+  - "@oxlint/binding-linux-s390x-gnu@1.75.0"
+  - "@oxlint/binding-linux-x64-gnu@1.75.0"
+  - "@oxlint/binding-linux-x64-musl@1.75.0"
+  - "@oxlint/binding-openharmony-arm64@1.75.0"
+  - "@oxlint/binding-win32-arm64-msvc@1.75.0"
+  - "@oxlint/binding-win32-ia32-msvc@1.75.0"
+  - "@oxlint/binding-win32-x64-msvc@1.75.0"
+  - oxlint-tsgolint@7.0.2001
+  - oxlint@1.75.0
+  - oxlint-config-awesomeness@3.4.2
+  - oxlint-plugin-react-doctor@0.9.6
 
 onlyBuiltDependencies:
   - "@tailwindcss/oxide"
