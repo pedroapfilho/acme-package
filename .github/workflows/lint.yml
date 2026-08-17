@@ -17,7 +17,6 @@ jobs:
         with:
           runtime: node@24
           cache: true
-      # Type-aware linting resolves built workspace .d.ts files. Only the
-      # publishable packages are lint dependencies; the apps are lint targets.
-      - run: pnpm build --filter="./packages/*"
-      - run: pnpm oxlint --format=github .
+      # lint:ci runs build:packages first: type-aware linting resolves built
+      # workspace .d.ts files, which do not exist after a bare install.
+      - run: pnpm lint:ci

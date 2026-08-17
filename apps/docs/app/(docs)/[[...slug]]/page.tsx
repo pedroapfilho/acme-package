@@ -3,11 +3,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MarkdownCopyButton, ViewOptionsPopover } from "@/components/ai/page-actions";
-import { GITHUB_URL } from "@/lib/site";
+import { docsMarkdownUrl, docsSourceUrl } from "@/lib/site";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
-
-const GITHUB_DOCS_BASE = `${GITHUB_URL}/blob/main/apps/docs/content/docs`;
 
 type PageProps = {
   params: Promise<{ slug?: Array<string> }>;
@@ -21,8 +19,8 @@ const Page = async ({ params }: PageProps) => {
   }
 
   const MDXContent = page.data.body;
-  const markdownUrl = `${page.url}.md`;
-  const githubUrl = `${GITHUB_DOCS_BASE}/${page.path}`;
+  const markdownUrl = docsMarkdownUrl(page.url);
+  const githubUrl = docsSourceUrl(page.path);
 
   return (
     <DocsPage full={page.data.full} toc={page.data.toc}>

@@ -1,7 +1,15 @@
 "use client";
 import { usePathname } from "fumadocs-core/framework";
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
-import { type ComponentProps, useEffect, useMemo, useRef, useState, useTransition } from "react";
+import {
+  type ComponentProps,
+  type ReactNode,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from "react";
 
 import { cn } from "../../lib/cn";
 import { SITE_ORIGIN } from "../../lib/site";
@@ -34,7 +42,52 @@ const AI_PROVIDERS = [
 ];
 
 const markdownCache = new Map<string, Promise<string>>();
+
+// Evicts itself on rejection so a failed fetch is never served to a later reader.
+// The returned promise stays unawaited at the call site: ClipboardItem accepts a
+// promise, and clipboard.write() must be reached synchronously within the click
+// task or Safari rejects it as lacking a user gesture.
+const loadMarkdown = (url: string): Promise<string> => {
+  const cached = markdownCache.get(url);
+  if (cached) {
+    return cached;
+  }
+
+  const pending = (async () => {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`fetching ${url} failed with ${response.status}`);
+      }
+      return await response.text();
+    } catch (error) {
+      markdownCache.delete(url);
+      throw error;
+    }
+  })();
+
+  // Outside a secure context `navigator.clipboard` is undefined, so the caller
+  // throws before it ever consumes this promise. Settling it here keeps that from
+  // surfacing as an unhandled rejection; the caller still sees its own error.
+  void (async () => {
+    try {
+      await pending;
+    } catch {
+      // Deliberately swallowed: eviction and reporting are the caller's job.
+    }
+  })();
+
+  markdownCache.set(url, pending);
+  return pending;
+};
+
 type CopyStatus = "copied" | "failed" | "idle";
+
+type PageLink = {
+  href: string;
+  icon: ReactNode;
+  title: string;
+};
 
 const MarkdownCopyButton = ({
   markdownUrl,
@@ -61,17 +114,7 @@ const MarkdownCopyButton = ({
 
   const handleClick = (): void => {
     startTransition(async () => {
-      const cached = markdownCache.get(markdownUrl);
-      const markdown =
-        cached ??
-        (async () => {
-          const response = await fetch(markdownUrl);
-          if (!response.ok) {
-            throw new Error(`fetching ${markdownUrl} failed with ${response.status}`);
-          }
-          return response.text();
-        })();
-      markdownCache.set(markdownUrl, markdown);
+      const markdown = loadMarkdown(markdownUrl);
       try {
         await navigator.clipboard.write([
           new ClipboardItem({
@@ -80,11 +123,6 @@ const MarkdownCopyButton = ({
         ]);
         showStatus("copied");
       } catch (error) {
-        try {
-          await markdown;
-        } catch {
-          markdownCache.delete(markdownUrl);
-        }
         showStatus("failed");
         console.warn(`[acme-package docs] copying ${markdownUrl} failed`, error);
       }
@@ -93,9 +131,6 @@ const MarkdownCopyButton = ({
 
   return (
     <button
-      disabled={isPending}
-      onClick={handleClick}
-      type="button"
       {...props}
       className={cn(
         buttonVariants({
@@ -105,6 +140,9 @@ const MarkdownCopyButton = ({
         }),
         props.className,
       )}
+      disabled={isPending || props.disabled}
+      onClick={handleClick}
+      type="button"
     >
       {status === "copied" ? <Check /> : <Copy />}
       <span aria-live="polite">
@@ -118,19 +156,15 @@ const ViewOptionsPopover = ({
   githubUrl,
   markdownUrl,
   ...props
-}: ComponentProps<"button"> & { githubUrl?: string; markdownUrl?: string }) => {
+}: ComponentProps<"button"> & { githubUrl: string; markdownUrl: string }) => {
   const pathname = usePathname();
-  const items = useMemo(() => {
+  const items = useMemo<Array<PageLink>>(() => {
     const pageUrl = new URL(pathname, SITE_ORIGIN);
     const q = `Read ${pageUrl}, I want to ask questions about it.`;
 
     return [
-      ...(githubUrl !== undefined && githubUrl !== ""
-        ? [{ href: githubUrl, icon: <GitHubIcon />, title: "Open in GitHub" }]
-        : []),
-      ...(markdownUrl !== undefined && markdownUrl !== ""
-        ? [{ href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" }]
-        : []),
+      { href: githubUrl, icon: <GitHubIcon />, title: "Open in GitHub" },
+      { href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" },
       ...AI_PROVIDERS.map(({ buildHref, icon, title }) => ({ href: buildHref(q), icon, title })),
     ];
   }, [githubUrl, markdownUrl, pathname]);

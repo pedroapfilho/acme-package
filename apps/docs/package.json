@@ -9,7 +9,7 @@
     "start": "next start -p 4000",
     "postinstall": "fumadocs-mdx",
     "typecheck": "fumadocs-mdx && tsc --noEmit",
-    "lint": "oxlint app lib components proxy.ts next.config.ts source.config.ts mdx-components.tsx",
+    "test": "vitest run",
     "clean": "rm -rf .next .source node_modules"
   },
   "dependencies": {
@@ -26,11 +26,13 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@repo/config-vitest": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/mdx": "^2.0.14",
     "@types/node": "^26.2.0",
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
   }
 }

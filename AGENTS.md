@@ -21,7 +21,9 @@ apps/
 
 ## Dev workflow
 
-Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `lint`, `typecheck`, `clean`, `start`. Root-only: `format`/`format:check` (oxfmt), the `fallow*` suite, `changeset`/`version-packages`/`release`. Pre-commit runs husky → lint-staged (oxlint + oxfmt).
+Root scripts run turbo: `dev`, `build`, `build:packages`, `test`, `test:coverage`, `typecheck`, `clean`, `start`. Root-only: `format`/`format:check` (oxfmt), the `fallow*` suite, `changeset`/`version-packages`/`release`. Pre-commit runs husky → lint-staged (oxlint + oxfmt).
+
+Lint is deliberately **not** a turbo task and packages carry no `lint` script. oxlint is one whole-repo binary reading one root config, so `lint` (local) and `lint:ci` (`--format=github`) both run `oxlint .`; a per-package fan-out only creates scopes that drift from CI. Both scripts run `build:packages` first, because type-aware linting resolves built workspace `.d.ts` that a bare install has not produced. `build:packages` is the single definition of that prebuild, shared with `.husky/pre-commit` and `fallow.yml`.
 
 ## Publishable package contract
 
@@ -46,5 +48,6 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 ## Notable decisions
 
 - `@acme/*` is the placeholder publish scope; forks rename it once (README → "Use this template", docs → "Using this template"). `@repo/*` configs are never renamed.
-- Seven workflows gate PRs on actions @v6: test/lint/format/fallow (the library-profile standard) plus build, typecheck and a react-doctor scan. `release.yml` is the eighth, on pushes to main only.
+- Seven workflows gate PRs on actions @v6: test/lint/format/fallow (the library-profile standard) plus build, typecheck and a react-doctor scan. `release.yml` is the eighth, on pushes to main only. Only the first six opt into `workflow_dispatch` and are re-dispatched onto the version PR by `release.yml`; react-doctor is deliberately excluded, so it must not be a required check.
+- `minimumReleaseAgeExclude` lists the lint toolchain per tool, not per version. Version pins went stale on every bump and pnpm falls back silently rather than erroring, so the list exempted nothing while reading as if it did.
 - This repo is registered in the orchestrator (`~/dev/orchestrator`) as `LIBRARY_SOURCE_OF_TRUTH`; tsconfig (`base.json`) and root devDependency versions are verifier baselines for the fleet's library repos. Change them deliberately.

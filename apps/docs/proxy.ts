@@ -16,8 +16,10 @@ const proxy = (request: NextRequest) => {
 
 export const config = {
   // A plain string literal so Next can statically extract the matcher.
+  // The `.*\.` alternative excludes every dotted path, which already covers the
+  // llms.txt / llms-full.txt / llms.mdx routes and the *.md rewrites in next.config.ts.
   // oxlint-disable-next-line unicorn/prefer-string-raw
-  matcher: ["/((?!api|llms\\.mdx|llms\\.txt|llms-full\\.txt|_next|.*\\.).*)"],
+  matcher: ["/((?!api|_next|.*\\.).*)"],
 };
 
 export default proxy;
