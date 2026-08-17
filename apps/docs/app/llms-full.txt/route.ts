@@ -23,5 +23,7 @@ export const GET = async () => {
     );
   }
 
-  return new Response(rendered.join("\n\n"));
+  return new Response(rendered.join("\n\n"), {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  });
 };

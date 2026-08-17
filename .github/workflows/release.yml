@@ -54,6 +54,10 @@ jobs:
       # merge and publish to npm on the feature PR's CI alone, and changesets
       # rewrites every version and internal dependency range in the workspace.
       # workflow_dispatch is exempt from that approval gate.
+      #
+      # The workflows listed below must stay equal to the set of branch-protection
+      # required checks. A required check missing here blocks every version PR
+      # forever; react-doctor.yml is deliberately in neither set.
       - name: Run gates on the version PR
         if: steps.changesets.outputs.pullRequestNumber
         env:
