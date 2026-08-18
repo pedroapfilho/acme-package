@@ -23,7 +23,7 @@ const Page = async ({ params }: PageProps) => {
   const githubUrl = docsSourceUrl(page.path);
 
   return (
-    <main className="contents">
+    <main className="contents" data-testid="docs-shell">
       <DocsPage full={page.data.full} toc={page.data.toc}>
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription>{page.data.description}</DocsDescription>

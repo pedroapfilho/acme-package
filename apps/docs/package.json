@@ -11,6 +11,7 @@
     "typecheck": "fumadocs-mdx && tsc --noEmit",
     "lint": "oxlint app lib components proxy.ts next.config.ts source.config.ts mdx-components.tsx",
     "test": "vitest run",
+    "test:e2e": "playwright test",
     "clean": "rm -rf .next .source node_modules"
   },
   "dependencies": {
@@ -27,6 +28,8 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@next/playwright": "16.3.0",
+    "@playwright/test": "^1.62.1",
     "@repo/config-vitest": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/mdx": "^2.0.14",
