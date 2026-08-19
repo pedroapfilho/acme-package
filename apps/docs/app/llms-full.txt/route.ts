@@ -1,9 +1,11 @@
+import { cacheLife } from "next/cache";
+
 import { getLLMText } from "@/lib/get-llm-text";
 import { source } from "@/lib/source";
 
-export const revalidate = false;
-
-export const GET = async () => {
+const getLlmsFull = async () => {
+  "use cache";
+  cacheLife("max");
   const results = await Promise.allSettled(source.getPages().map(getLLMText));
 
   const rendered: Array<string> = [];
@@ -23,7 +25,12 @@ export const GET = async () => {
     );
   }
 
-  return new Response(rendered.join("\n\n"), {
+  return rendered.join("\n\n");
+};
+
+const GET = async () =>
+  new Response(await getLlmsFull(), {
     headers: { "Content-Type": "text/plain; charset=utf-8" },
   });
-};
+
+export { GET };
