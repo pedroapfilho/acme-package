@@ -2,6 +2,7 @@ import { createStore } from "@acme/core";
 import { fireEvent, render, screen } from "@testing-library/react";
 import { act } from "react";
 import { hydrateRoot } from "react-dom/client";
+import type { HydrationOptions } from "react-dom/client";
 import { renderToString } from "react-dom/server";
 import { describe, expect, it, vi } from "vitest";
 
@@ -64,7 +65,7 @@ describe("useStore", () => {
       <Counter serverSnapshot={serverSnapshot} store={serverStore} />,
     );
     const clientStore = counterStore();
-    const onRecoverableError = vi.fn<(error: unknown, errorInfo: unknown) => void>();
+    const onRecoverableError = vi.fn<NonNullable<HydrationOptions["onRecoverableError"]>>();
     let root: ReturnType<typeof hydrateRoot> | undefined;
 
     act(() => {
