@@ -1,4 +1,4 @@
-name: Test
+name: Publish Checks
 on:
   push:
     branches: [main]
@@ -6,13 +6,16 @@ on:
   # Dispatched by release.yml for the changeset-release/main PR, whose
   # pull_request runs are parked unexecuted behind an approval gate.
   workflow_dispatch:
+
+permissions:
+  contents: read
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-permissions:
-  contents: read
+
 jobs:
-  vitest:
+  packaging:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -23,4 +26,12 @@ jobs:
         with:
           runtime: node@24
           cache: true
-      - run: pnpm test
+      - run: pnpm typecheck
+      - run: pnpm build
+      # Packaging hygiene for the published packages (ESM-only).
+      - name: publint
+        run: for pkg in core react; do (cd "packages/$pkg" && pnpm dlx publint --strict); done
+      - name: are-the-types-wrong
+        run: |
+          (cd packages/core && pnpm dlx @arethetypeswrong/cli --pack --profile esm-only)
+          (cd packages/react && pnpm dlx @arethetypeswrong/cli --pack --profile esm-only)
