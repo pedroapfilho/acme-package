@@ -6,7 +6,7 @@
   "scripts": {
     "build": "vite build",
     "clean": "rm -rf dist node_modules",
-    "dev": "vite",
+    "dev": "portless run --name acme-package.demo vite",
     "lint": "oxlint src",
     "start": "vite preview",
     "typecheck": "tsc -p tsconfig.json --noEmit"
