@@ -9,5 +9,7 @@
   ],
   "ignorePatterns": ["apps/docs/content/**", "apps/docs/next-env.d.ts"],
   "ignoreExports": [{ "file": "apps/docs/app/**/route.ts", "exports": ["generateStaticParams"] }],
-  "ignoreDependencies": ["@vitest/coverage-v8", "jsdom", "react-dom"]
+  "ignoreDependencies": ["@vitest/coverage-v8", "jsdom", "react-dom"],
+  "typeAware": { "enabled": true, "require": "best-effort" },
+  "rules": { "private-type-leaks": "off" }
 }
