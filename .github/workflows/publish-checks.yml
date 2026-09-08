@@ -26,6 +26,22 @@ jobs:
         with:
           runtime: node@24
           cache: true
+      - name: Restore Turbo task cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: .turbo/cache
+          key: turbo-${{ runner.os }}-${{ runner.arch }}-node24-publish-checks-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-${{ runner.arch }}-node24-publish-checks-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-
+            turbo-${{ runner.os }}-${{ runner.arch }}-node24-publish-checks-push-main-
+      - name: Restore Next.js compiler cache
+        uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
+        with:
+          path: "apps/*/.next/cache"
+          key: next-${{ runner.os }}-${{ runner.arch }}-node24-${{ hashFiles('pnpm-lock.yaml') }}-publish-checks-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            next-${{ runner.os }}-${{ runner.arch }}-node24-${{ hashFiles('pnpm-lock.yaml') }}-publish-checks-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-
+            next-${{ runner.os }}-${{ runner.arch }}-node24-${{ hashFiles('pnpm-lock.yaml') }}-publish-checks-push-main-
       - run: pnpm typecheck
       - run: pnpm build
       # Packaging hygiene for the published packages (ESM-only).
