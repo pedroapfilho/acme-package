@@ -26,14 +26,6 @@ jobs:
         with:
           runtime: node@24
           cache: true
-      - name: Check formatting
-        id: format
-        continue-on-error: true
-        run: pnpm format:check
-      - name: Check dead code
-        id: fallow
-        continue-on-error: true
-        run: pnpm fallow:dead
       - name: Restore Turbo task cache
         uses: actions/cache@caa296126883cff596d87d8935842f9db880ef25 # v5
         with:
@@ -45,6 +37,14 @@ jobs:
       # Type-aware linting resolves built workspace .d.ts files. Only the
       # publishable packages are lint dependencies; the apps are lint targets.
       - run: pnpm build --filter="./packages/*"
+      - name: Check formatting
+        id: format
+        continue-on-error: true
+        run: pnpm format:check
+      - name: Check dead code
+        id: fallow
+        continue-on-error: true
+        run: pnpm fallow:dead
       - run: pnpm oxlint --format=github .
   oxfmt:
     needs: oxlint
