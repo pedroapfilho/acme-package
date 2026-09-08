@@ -23,4 +23,22 @@ jobs:
         with:
           runtime: node@24
           cache: true
+      - name: Restore Turbo task cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: .turbo
+          key: turbo-${{ runner.os }}-build-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            turbo-${{ runner.os }}-build-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-
+            turbo-${{ runner.os }}-build-push-main-
+      # Turbo restores complete build outputs on a task hit. Preserve Next's
+      # compiler cache separately so changed docs can still compile incrementally.
+      - name: Restore Next.js compiler cache
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: apps/docs/.next/cache
+          key: next-${{ runner.os }}-node24-${{ hashFiles('pnpm-lock.yaml') }}-build-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-${{ github.sha }}
+          restore-keys: |
+            next-${{ runner.os }}-node24-${{ hashFiles('pnpm-lock.yaml') }}-build-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}-
+            next-${{ runner.os }}-node24-${{ hashFiles('pnpm-lock.yaml') }}-build-push-main-
       - run: pnpm build
