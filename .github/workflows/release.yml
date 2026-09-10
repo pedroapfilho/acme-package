@@ -9,20 +9,17 @@ concurrency: release-${{ github.ref }}
 permissions:
   contents: write # push the version commit and git tags
   pull-requests: write # open/update the "Version Packages" PR
-  id-token: write # npm publish provenance
+  id-token: write # OIDC exchange for npm trusted publishing
   actions: write # dispatch the gate workflows onto the version branch
 
 jobs:
   release:
+    # Dormant in the template: the example @acme/* packages are placeholders a
+    # fork renames before publishing. Forks activate releases by setting the
+    # RELEASE_ENABLED variable and registering an npm trusted publisher per package.
+    if: vars.RELEASE_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 15
-    # Dormant in the template: the example @acme/* packages are placeholders a
-    # fork renames before publishing. Forks activate releases by adding the
-    # NPM_TOKEN secret (otherwise changesets falls back to OIDC and tries to
-    # publish the placeholders). `secrets` is not a valid context in a job-level
-    # `if`, so the gate lives on the changesets step via env.
-    env:
-      HAS_NPM_TOKEN: ${{ secrets.NPM_TOKEN != '' }}
     steps:
       # Persisted credentials are the point here: changesets pushes the
       # version commit and tags through this token.
@@ -40,7 +37,6 @@ jobs:
 
       - uses: changesets/action@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         id: changesets
-        if: env.HAS_NPM_TOKEN == 'true'
         with:
           version-script: pnpm version-packages
           publish-script: pnpm release
@@ -48,9 +44,6 @@ jobs:
           pr-title: "chore: version packages"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # actions/setup-node generates an .npmrc that reads NODE_AUTH_TOKEN; must match.
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
 
       # The version PR is authored by GITHUB_TOKEN, so its pull_request runs are
       # created in `action_required` and never execute: without this the PR would
