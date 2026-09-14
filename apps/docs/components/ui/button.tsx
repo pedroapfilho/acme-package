@@ -1,16 +1,16 @@
 import { cva } from "class-variance-authority";
 
 const variants = {
-  ghost: "hover:bg-fd-accent hover:text-fd-accent-foreground",
-  outline: "border hover:bg-fd-accent hover:text-fd-accent-foreground",
+  ghost: "hover:bg-docs-accent hover:text-docs-accent-foreground",
+  outline: "border hover:bg-docs-accent hover:text-docs-accent-foreground",
   primary:
-    "bg-fd-primary text-fd-primary-foreground hover:bg-fd-primary/80 disabled:bg-fd-secondary disabled:text-fd-secondary-foreground",
+    "bg-docs-primary text-docs-primary-foreground hover:bg-docs-primary/80 disabled:bg-docs-secondary disabled:text-docs-secondary-foreground",
   secondary:
-    "border bg-fd-secondary text-fd-secondary-foreground hover:bg-fd-accent hover:text-fd-accent-foreground",
+    "border bg-docs-secondary text-docs-secondary-foreground hover:bg-docs-accent hover:text-docs-accent-foreground",
 } as const;
 
 const buttonVariants = cva(
-  "focus-visible:ring-fd-ring inline-flex items-center justify-center rounded-md p-2 text-sm font-medium transition-colors duration-100 focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
+  "focus-visible:ring-docs-ring inline-flex items-center justify-center rounded-md p-2 text-sm font-medium transition-colors duration-100 focus-visible:ring-2 focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50",
   {
     variants: {
       color: variants,

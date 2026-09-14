@@ -22,6 +22,7 @@
     .reading-progress-bar {
       animation: reading-progress linear both;
       animation-timeline: scroll(root block);
+      animation-range: 0% 100%;
     }
   }
 }
@@ -70,4 +71,29 @@ button[data-toc-popover-trigger] {
     linear-gradient(color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px),
     linear-gradient(90deg, color-mix(in oklch, var(--border) 50%, transparent) 1px, transparent 1px);
   background-size: 2rem 2rem;
+}
+
+@theme inline {
+  --color-docs-ring: var(--color-fd-ring);
+  --color-docs-accent: var(--color-fd-accent);
+  --color-docs-accent-foreground: var(--color-fd-accent-foreground);
+  --color-docs-primary: var(--color-fd-primary);
+  --color-docs-primary-foreground: var(--color-fd-primary-foreground);
+  --color-docs-secondary: var(--color-fd-secondary);
+  --color-docs-secondary-foreground: var(--color-fd-secondary-foreground);
+  --color-docs-popover: var(--color-fd-popover);
+  --color-docs-popover-foreground: var(--color-fd-popover-foreground);
+  --color-docs-muted-foreground: var(--color-fd-muted-foreground);
+}
+
+@utility popover-anchor {
+  anchor-name: --fd-popover-anchor;
+}
+@utility popover-position {
+  position-anchor: --fd-popover-anchor;
+  position-area: block-end span-inline;
+  position-try-fallbacks: flip-block;
+}
+@utility max-w-popover-viewport {
+  max-width: 98vw;
 }
