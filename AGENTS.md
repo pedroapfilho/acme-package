@@ -48,3 +48,7 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 - `@acme/*` is the placeholder publish scope; forks rename it once (README → "Use this template", docs → "Using this template"). `@repo/*` configs are never renamed.
 - Seven workflows gate PRs on actions @v6: test/lint/format/fallow (the library-profile standard) plus build, typecheck and a react-doctor scan. `release.yml` is the eighth, on pushes to main only. Only the first six opt into `workflow_dispatch` and are re-dispatched onto the version PR by `release.yml`; react-doctor is deliberately excluded, so it must not be a required check.
 - This repo is registered in the orchestrator (`~/dev/orchestrator`) as the `library` profile's base; tsconfig (`base.json`) and root devDependency versions are the check baseline for the fleet's library repos. Change them deliberately.
+
+## Design-system linting
+
+Run `pnpm lint` after changes and fix every error. `oxlint.config.ts` registers `@shadcn/lint` and enforces component contracts, known Tailwind classes, and readable component class names. Primitives in `apps/docs/components/ui` own their internal styles; keep unknown-class checking enabled there. Use `PopoverTrigger` color and size props for button styling. Update the config's component-directory override when moving primitives. Theme discovery stays local to each app.
