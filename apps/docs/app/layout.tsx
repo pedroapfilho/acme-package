@@ -34,7 +34,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
       </a>
       <div
         aria-hidden="true"
-        className="reading-progress-bar bg-primary fixed top-0 left-0 z-50 h-0.5 w-full [animation-range:0%_100%]"
+        className="reading-progress-bar bg-primary fixed top-0 left-0 z-50 h-0.5 w-full"
       />
       <div className="contents" id="main-content">
         {/* Static search keeps the docs deployable without a search backend; the

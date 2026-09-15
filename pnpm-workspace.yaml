@@ -50,6 +50,7 @@ minimumReleaseAgeExclude:
   - astro-awesomeness
   - oxlint-config-awesomeness
   - oxlint-plugin-react-doctor@0.9.12
+  - "@shadcn/lint@0.1.0"
 
 onlyBuiltDependencies:
   - "@tailwindcss/oxide"
