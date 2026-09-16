@@ -51,4 +51,8 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 
 ## Design-system linting
 
-Run `pnpm lint` after changes and fix every error. `oxlint.config.ts` registers `@shadcn/lint` and enforces all six rules as errors: component contracts, known Tailwind classes, static component class names, semantic colors, theme or scale values, and class-based styling. Use CSS custom properties for runtime geometry and named theme tokens for custom values. All six rules apply to primitives in `apps/docs/components/ui`. Use `PopoverTrigger` color and size props for button styling. Do not disable design-system rules in directory overrides. Theme discovery stays local to each app.
+Run `pnpm lint` after changes and fix every error. `oxlint.config.ts` registers `@shadcn/lint` and enforces all six rules as errors: component contracts, known Tailwind classes, static component class names, semantic colors, theme or scale values, and class-based styling. Use CSS custom properties for runtime geometry and named theme tokens for custom values. All six rules apply to primitives in `apps/docs/components/ui`. Compose `PopoverTrigger` with `render={<Button />}` for button styling. Do not disable design-system rules in directory overrides. Theme discovery stays local to each app.
+
+## Upstream UI components
+
+Keep registry primitive APIs and exports aligned with the configured shadcn Base UI style. Product-specific adapters and compositions live outside the primitive directory. Import variant factories from their component module. Preserve product branding in theme tokens, load `shadcn/tailwind.css`, and run `pnpm check:shadcn` with lint, typechecks, tests and the build. Review upstream changes and documented equivalent normalizations before updating the source lock; never refresh it to hide a custom primitive fork.

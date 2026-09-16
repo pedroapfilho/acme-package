@@ -13,7 +13,7 @@ import {
 
 import { cn } from "../../lib/cn";
 import { SITE_ORIGIN } from "../../lib/site";
-import { buttonVariants } from "../ui/button";
+import { Button, buttonVariants } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { AnthropicIcon, CursorIcon, GitHubIcon, OpenAiIcon, SciraIcon } from "./provider-icons";
@@ -135,8 +135,8 @@ const MarkdownCopyButton = ({
       className={cn(
         buttonVariants({
           className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-docs-muted-foreground",
-          color: "secondary",
           size: "sm",
+          variant: "secondary",
         }),
         props.className,
       )}
@@ -173,9 +173,8 @@ const ViewOptionsPopover = ({
     <Popover>
       <PopoverTrigger
         {...props}
-        className={cn("gap-2", props.className)}
-        color="secondary"
-        size="sm"
+        className={props.className}
+        render={<Button size="sm" variant="secondary" />}
       >
         {props.children ?? "Open"}
         <ChevronDown className="text-docs-muted-foreground size-3.5" />
