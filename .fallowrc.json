@@ -8,7 +8,7 @@
     "apps/docs/source.config.ts",
     "apps/docs/components/ui/*.tsx"
   ],
-  "ignorePatterns": ["apps/docs/content/**", "apps/docs/next-env.d.ts"],
+  "ignorePatterns": ["apps/docs/content/**", "apps/docs/next-env.d.ts", ".github/ci/*.mjs"],
   "ignoreExports": [
     {
       "file": "apps/docs/app/**/route.ts",

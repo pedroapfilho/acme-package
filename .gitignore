@@ -32,3 +32,6 @@ test-results/
 
 # claude code local
 .claude/
+
+# CI selection and execution reports
+.ci-results/
