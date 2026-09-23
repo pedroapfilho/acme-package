@@ -15,7 +15,7 @@
       "exports": ["generateStaticParams"]
     }
   ],
-  "ignoreDependencies": ["@vitest/coverage-v8", "jsdom", "react-dom"],
+  "ignoreDependencies": ["@vitest/coverage-v8", "jsdom", "react-dom", "zod"],
   "typeAware": {
     "enabled": true,
     "require": "best-effort"
