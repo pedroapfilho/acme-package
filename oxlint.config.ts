@@ -1,18 +1,12 @@
 import { defineConfig } from "oxlint";
 import awesomeness from "oxlint-config-awesomeness";
+import shadcn from "oxlint-config-awesomeness/shadcn";
 
 export default defineConfig({
-  extends: [awesomeness],
+  extends: [awesomeness, shadcn],
   // Generated runtime is byte-verified and tested in the control plane.
   ignorePatterns: [".github/ci/*.mjs"],
-  jsPlugins: ["@shadcn/lint"],
   overrides: [
-    {
-      files: ["**/__tests__/**/*.ts", "**/__tests__/**/*.tsx", "**/*.test.ts", "**/*.test.tsx"],
-      rules: {
-        "number-literal-case": "off",
-      },
-    },
     {
       files: ["apps/**/*.ts", "apps/**/*.tsx"],
       rules: {
@@ -22,9 +16,6 @@ export default defineConfig({
     },
   ],
   rules: {
-    "shadcn/no-arbitrary-values": "error",
-    "shadcn/no-inline-styles": "error",
-    "shadcn/no-raw-colors": "error",
     "shadcn/no-restyle": [
       "error",
       {
@@ -32,7 +23,5 @@ export default defineConfig({
         contracts: [{ allow: ["layout", "gap-*"], pattern: "^PopoverTrigger$" }],
       },
     ],
-    "shadcn/no-unknown-classes": "error",
-    "shadcn/require-static-classes": "error",
   },
 });
