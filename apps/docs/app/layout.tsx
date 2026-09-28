@@ -37,9 +37,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
         className="reading-progress-bar bg-primary fixed top-0 left-0 z-50 h-0.5 w-full"
       />
       <div className="contents" id="main-content">
-        {/* Static search keeps the docs deployable without a search backend; the
-            non-deprecated path is a custom search dialog this template avoids owning. */}
-        {/* oxlint-disable-next-line typescript/no-deprecated */}
+        {/* oxlint-disable-next-line typescript/no-deprecated -- static search needs no search backend; the replacement is a custom search dialog this template avoids owning */}
         <RootProvider search={{ options: { type: "static" } }}>{children}</RootProvider>
       </div>
     </body>
