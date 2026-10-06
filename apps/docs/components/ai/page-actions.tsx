@@ -2,6 +2,7 @@
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 
+import { SITE_NAME } from "../../lib/site";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
@@ -110,7 +111,7 @@ const CopyMarkdownButton = ({ markdownUrl }: Pick<PageActionsProps, "markdownUrl
         showStatus("copied");
       } catch (error) {
         showStatus("failed");
-        console.warn(`[acme-package docs] copying ${markdownUrl} failed`, error);
+        console.warn(`[${SITE_NAME}] copying ${markdownUrl} failed`, error);
       }
     });
   };

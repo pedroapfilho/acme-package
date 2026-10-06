@@ -1,11 +1,12 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+import { docsSourceUrl, siteUrl } from "../../lib/site";
+
 const LINKS = {
   markdownUrl: "/core.md",
-  pageUrl: "https://docs.acme-package.dev/core",
-  sourceUrl:
-    "https://github.com/pedroapfilho/acme-package/blob/main/apps/docs/content/docs/core.mdx",
+  pageUrl: siteUrl("/core"),
+  sourceUrl: docsSourceUrl("core.mdx"),
 };
 
 const PROMPT = `Read ${LINKS.pageUrl}, I want to ask questions about it.`;

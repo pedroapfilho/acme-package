@@ -2,7 +2,7 @@ import type { Item, Node, Root } from "fumadocs-core/page-tree";
 import type { LoaderConfig, LoaderOutput } from "fumadocs-core/source";
 import { llms } from "fumadocs-core/source/llms";
 
-import { SITE_ORIGIN } from "./site";
+import { siteUrl } from "./site";
 
 type MarkdownPage = {
   data: {
@@ -37,7 +37,7 @@ const renderAllPagesMarkdown = async (source: { getPages: () => Array<MarkdownPa
 
 const linkMarkdownItem = (item: Item): Item => ({
   ...item,
-  url: new URL(pageMarkdownUrl(item.url), SITE_ORIGIN).href,
+  url: siteUrl(pageMarkdownUrl(item.url)),
 });
 
 const linkMarkdownNode = (node: Node): Node => {
