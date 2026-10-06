@@ -62,3 +62,8 @@ The package shape is the contract; keep it identical across packages:
 - a `tsdown.config.ts` for the build
 - `prepack` runs the build
 - tests via `@repo/config-vitest`
+- a `turbo.json` that opts those tests into Turbo's cache
+
+No file outside the package names it: `publish-checks.yml` runs publint and
+`@arethetypeswrong/cli` in every package under `packages/` that is not
+`private`.
