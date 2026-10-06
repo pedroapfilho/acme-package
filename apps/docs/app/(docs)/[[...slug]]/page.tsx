@@ -3,7 +3,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { MarkdownCopyButton, ViewOptionsPopover } from "@/components/ai/page-actions";
-import { docsMarkdownUrl, docsSourceUrl } from "@/lib/site";
+import { pageMarkdownUrl } from "@/lib/page-markdown";
+import { docsSourceUrl } from "@/lib/site";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -19,7 +20,7 @@ const Page = async ({ params }: PageProps) => {
   }
 
   const MDXContent = page.data.body;
-  const markdownUrl = docsMarkdownUrl(page.url);
+  const markdownUrl = pageMarkdownUrl(page.url);
   const githubUrl = docsSourceUrl(page.path);
 
   return (
