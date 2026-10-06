@@ -44,7 +44,7 @@ The rename surface is small. Full walkthrough: docs → "Using this template".
 
 ## Releasing
 
-Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `release.yml` publishes to npm with provenance (set `NPM_TOKEN`).
+Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `release.yml` publishes to npm with provenance. It authenticates through npm trusted publishing (GitHub OIDC), so the repository stores no npm token. The release job is skipped until you register this repository and `release.yml` as the trusted publisher of each package on npmjs.com and set the `RELEASE_ENABLED` repository variable to `true`.
 
 ## Scripts
 
@@ -58,4 +58,4 @@ Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `
 
 ## Stack
 
-pnpm 11.13.1 (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 4 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
+pnpm 11.13.1 (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 5 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
