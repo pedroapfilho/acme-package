@@ -2,8 +2,9 @@ import { DocsBody, DocsDescription, DocsPage, DocsTitle } from "fumadocs-ui/page
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { MarkdownCopyButton, ViewOptionsPopover } from "@/components/ai/page-actions";
-import { docsMarkdownUrl, docsSourceUrl } from "@/lib/site";
+import { PageActions } from "@/components/ai/page-actions";
+import { pageMarkdownUrl } from "@/lib/page-markdown";
+import { docsSourceUrl, siteUrl } from "@/lib/site";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";
 
@@ -19,8 +20,6 @@ const Page = async ({ params }: PageProps) => {
   }
 
   const MDXContent = page.data.body;
-  const markdownUrl = docsMarkdownUrl(page.url);
-  const githubUrl = docsSourceUrl(page.path);
 
   return (
     <main className="contents" data-testid="docs-shell">
@@ -28,8 +27,11 @@ const Page = async ({ params }: PageProps) => {
         <DocsTitle>{page.data.title}</DocsTitle>
         <DocsDescription>{page.data.description}</DocsDescription>
         <div className="flex flex-row items-center gap-2 border-b pt-2 pb-6">
-          <MarkdownCopyButton markdownUrl={markdownUrl} />
-          <ViewOptionsPopover githubUrl={githubUrl} markdownUrl={markdownUrl} />
+          <PageActions
+            markdownUrl={pageMarkdownUrl(page.url)}
+            pageUrl={siteUrl(page.url)}
+            sourceUrl={docsSourceUrl(page.path)}
+          />
         </div>
         <DocsBody>
           <MDXContent components={getMDXComponents()} />

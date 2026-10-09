@@ -4,15 +4,14 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
-import { SITE_ORIGIN } from "@/lib/site";
+import { SITE_DESCRIPTION, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
-  description:
-    "Documentation for acme-package: the template for library monorepos. Fork it, rename one scope, and publish.",
+  description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_ORIGIN),
   title: {
-    default: "acme-package · library monorepo template",
-    template: "%s · acme-package docs",
+    default: SITE_NAME,
+    template: `%s · ${SITE_NAME}`,
   },
 };
 

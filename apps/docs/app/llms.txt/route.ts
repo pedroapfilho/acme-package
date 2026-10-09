@@ -1,13 +1,12 @@
-import { llms } from "fumadocs-core/source";
 import { cacheLife } from "next/cache";
 
+import { renderMarkdownIndex } from "@/lib/page-markdown";
 import { source } from "@/lib/source";
 
 const getLlmsIndex = async () => {
   "use cache";
   cacheLife("max");
-  const index = await Promise.resolve(llms(source).index());
-  return index;
+  return renderMarkdownIndex(source);
 };
 
 const GET = async () =>

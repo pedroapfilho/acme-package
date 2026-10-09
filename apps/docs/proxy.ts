@@ -1,18 +1,15 @@
-import { isMarkdownPreferred, rewritePath } from "fumadocs-core/negotiation";
+import { isMarkdownPreferred } from "fumadocs-core/negotiation";
 import { type NextRequest, NextResponse } from "next/server";
 
-const { rewrite } = rewritePath("/{*path}", "/llms.mdx/{*path}");
+import { markdownRoutePath } from "@/lib/page-markdown";
 
-const proxy = (request: NextRequest) => {
-  if (isMarkdownPreferred(request)) {
-    const result = rewrite(request.nextUrl.pathname);
-    if (result !== false && result !== "") {
-      return NextResponse.rewrite(new URL(result, request.nextUrl));
-    }
-  }
-
-  return NextResponse.next();
-};
+const proxy = (request: NextRequest) =>
+  isMarkdownPreferred(request)
+    ? NextResponse.rewrite(new URL(markdownRoutePath(request.nextUrl.pathname), request.nextUrl), {
+        // Next's app-page runtime overwrites Vary on HTML responses, so only the markdown variant can carry it.
+        headers: { Vary: "Accept" },
+      })
+    : NextResponse.next();
 
 export const config = {
   // A plain string literal so Next can statically extract the matcher.
