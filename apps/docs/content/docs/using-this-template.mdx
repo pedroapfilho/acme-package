@@ -48,7 +48,12 @@ Releases run through Changesets:
    updates changelogs.
 3. Merging that PR publishes to npm with provenance.
 
-The workflow needs an `NPM_TOKEN` secret on the repository.
+`release.yml` authenticates through npm trusted publishing: it exchanges a
+GitHub OIDC token for a short-lived npm credential, so the repository stores
+no npm token. Before the first release, register this repository and the
+`release.yml` workflow as the trusted publisher in each package's settings on
+npmjs.com, then set the `RELEASE_ENABLED` repository variable to `true`. The
+release job is skipped until that variable is set.
 
 ## Adding a package
 
@@ -62,3 +67,8 @@ The package shape is the contract; keep it identical across packages:
 - a `tsdown.config.ts` for the build
 - `prepack` runs the build
 - tests via `@repo/config-vitest`
+- a `turbo.json` that opts those tests into Turbo's cache
+
+No file outside the package names it: `publish-checks.yml` runs publint and
+`@arethetypeswrong/cli` in every package under `packages/` that is not
+`private`.
