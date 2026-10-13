@@ -25,12 +25,12 @@ Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `lint`, `typech
 
 ## Publishable package contract
 
-Every publishable package keeps the same shape; copy `packages/core` to add one:
+Every publishable package keeps the same shape; copy `packages/core` to add one. Nothing outside the package directory names it: `publish-checks.yml` runs publint and attw in every package under `packages/` that is not `private: true`.
 
 - `exports: { ".": { types, default } }`, `files: ["dist"]`, `sideEffects: false`, `publishConfig.access: public`, MIT
 - tsdown build: ESM-only, `dts`, `sourcemap`, `target es2022`, `treeshake`, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build); `platform: neutral` (core-like) or `browser` (react-like)
 - `prepack` runs the build (turbo owns ordering everywhere else, so there is no `prepare` build); `typecheck` is `tsc --noEmit` against `@repo/typescript-config/{base,react-library}.json` and covers test files
-- Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset
+- Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset. The package's `turbo.json` opts `test` into Turbo's cache; the root `test` task stays uncached, so only audited unit suites cache
 
 ## Publishing
 

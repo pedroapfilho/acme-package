@@ -1,0 +1,15 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "test": {
+      "cache": true,
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/packages/config-vitest/**",
+        "$TURBO_ROOT$/packages/config-typescript/**"
+      ],
+      "env": ["CI", "LANG", "LC_ALL", "TZ"]
+    }
+  }
+}
