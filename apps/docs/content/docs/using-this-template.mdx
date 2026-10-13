@@ -24,17 +24,22 @@ Everything you must touch after forking, in order:
 
 2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
    **both** publishable packages, and:
-   - `GITHUB_URL` and `SITE_ORIGIN` in `apps/docs/lib/site.ts`, the single
-     module every docs GitHub link and absolute page URL derives from.
-   - the `nav.title` wordmark string in `apps/docs/lib/layout.shared.tsx`.
-   - `metadata.title` and `metadata.description` in `apps/docs/app/layout.tsx`.
+   - the product name, wordmark, description, site origin, and repository URL
+     in `apps/docs/lib/site.ts`. The docs metadata, nav, GitHub links, and
+     absolute page URLs all read from it.
+   - the repository link in `apps/docs/content/docs/index.mdx`. Page Markdown
+     keeps a JSX expression verbatim, so the URL stays literal, and a test
+     fails until it matches `site.ts`.
+   - the title in `apps/demo-vite/index.html` and the title and text in
+     `apps/demo-vite/public/404.html`.
+   - `README.md` and `AGENTS.md`, which name the repo and its docs dev URL.
 
    The `repository.url` matters more than it looks: npm provenance validates
    it against the repository that runs the publish, so a renamed fork's first
    `release` fails if you skip this.
 
-3. **The portless name** in the docs dev script
-   (`apps/docs/package.json` → `"dev"`).
+3. **The portless names** in the docs and demo dev scripts
+   (`apps/docs/package.json` and `apps/demo-vite/package.json` → `"dev"`).
 
 4. **The LICENSE holder.**
 

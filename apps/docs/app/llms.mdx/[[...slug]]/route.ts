@@ -1,15 +1,14 @@
 import { cacheLife } from "next/cache";
 import { notFound } from "next/navigation";
 
-import { getLLMText } from "@/lib/get-llm-text";
+import { renderPageMarkdown } from "@/lib/page-markdown";
 import { source } from "@/lib/source";
 
 const getPageMarkdown = async (slug?: Array<string>) => {
   "use cache";
   cacheLife("max");
   const page = source.getPage(slug);
-  const markdown = page ? await getLLMText(page) : null;
-  return markdown;
+  return page ? renderPageMarkdown(page) : null;
 };
 
 const GET = async (_req: Request, { params }: { params: Promise<{ slug?: Array<string> }> }) => {

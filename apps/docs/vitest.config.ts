@@ -1,12 +1,12 @@
-import nodeConfig from "@repo/config-vitest/node";
+import reactConfig from "@repo/config-vitest/react";
 import { defineConfig, mergeConfig } from "vitest/config";
 
 // The docs app has no src/, which is what the shared preset targets.
 const docsConfig = mergeConfig(
-  nodeConfig,
+  reactConfig,
   defineConfig({
     test: {
-      include: ["lib/**/*.test.ts"],
+      include: ["components/**/*.test.tsx", "lib/**/*.test.ts"],
     },
   }),
 );

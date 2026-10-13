@@ -1,6 +1,8 @@
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
+import { markdownRewrites } from "./lib/page-markdown";
+
 const withMDX = createMDX();
 const exposeTestingApi = process.env.EXPOSE_TESTING_API === "1";
 
@@ -29,12 +31,7 @@ const config: NextConfig = {
     ]),
   partialPrefetching: true,
   reactStrictMode: true,
-  rewrites() {
-    return [
-      { destination: "/llms.mdx", source: "/index.md" },
-      { destination: "/llms.mdx/:path*", source: "/:path*.md" },
-    ];
-  },
+  rewrites: () => Promise.resolve(markdownRewrites),
 };
 
 export default withMDX(config);
