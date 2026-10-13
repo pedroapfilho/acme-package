@@ -36,10 +36,12 @@
     "@playwright/test": "^1.63.0",
     "@repo/config-vitest": "workspace:*",
     "@repo/typescript-config": "workspace:*",
+    "@testing-library/react": "^16.3.3",
     "@types/mdx": "^2.0.14",
     "@types/node": "^26.6.2",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
+    "jsdom": "^30.1.1",
     "typescript": "^7.0.2",
     "vitest": "^5.0.1"
   }

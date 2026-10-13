@@ -1,19 +1,9 @@
 "use client";
-import { usePathname } from "fumadocs-core/framework";
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
-import {
-  type ComponentProps,
-  type ReactNode,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 
-import { cn } from "../../lib/cn";
-import { SITE_ORIGIN } from "../../lib/site";
-import { Button, buttonVariants } from "../ui/button";
+import { SITE_NAME } from "../../lib/site";
+import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 
 import { AnthropicIcon, CursorIcon, GitHubIcon, OpenAiIcon, SciraIcon } from "./provider-icons";
@@ -83,16 +73,13 @@ const loadMarkdown = (url: string): Promise<string> => {
 
 type CopyStatus = "copied" | "failed" | "idle";
 
-type PageLink = {
-  href: string;
-  icon: ReactNode;
-  title: string;
+type PageActionsProps = {
+  markdownUrl: string;
+  pageUrl: string;
+  sourceUrl: string;
 };
 
-const MarkdownCopyButton = ({
-  markdownUrl,
-  ...props
-}: ComponentProps<"button"> & { markdownUrl: string }) => {
+const CopyMarkdownButton = ({ markdownUrl }: Pick<PageActionsProps, "markdownUrl">) => {
   const [isPending, startTransition] = useTransition();
   const [status, setStatus] = useState<CopyStatus>("idle");
   const timeoutRef = useRef<number | undefined>(undefined);
@@ -124,72 +111,50 @@ const MarkdownCopyButton = ({
         showStatus("copied");
       } catch (error) {
         showStatus("failed");
-        console.warn(`[acme-package docs] copying ${markdownUrl} failed`, error);
+        console.warn(`[${SITE_NAME}] copying ${markdownUrl} failed`, error);
       }
     });
   };
 
   return (
-    <button
-      {...props}
-      className={cn(
-        buttonVariants({
-          className: "gap-2 [&_svg]:size-3.5 [&_svg]:text-docs-muted-foreground",
-          size: "sm",
-          variant: "secondary",
-        }),
-        props.className,
+    <Button disabled={isPending} onClick={handleClick} size="sm" variant="secondary">
+      {status === "copied" ? (
+        <Check className="text-docs-muted-foreground" />
+      ) : (
+        <Copy className="text-docs-muted-foreground" />
       )}
-      disabled={isPending || props.disabled}
-      onClick={handleClick}
-      type="button"
-    >
-      {status === "copied" ? <Check /> : <Copy />}
       <span aria-live="polite">
-        {status === "failed" ? "Copy failed. Try again" : (props.children ?? "Copy Markdown")}
+        {status === "failed" ? "Copy failed. Try again" : "Copy Markdown"}
       </span>
-    </button>
+    </Button>
   );
 };
 
-const ViewOptionsPopover = ({
-  githubUrl,
-  markdownUrl,
-  ...props
-}: ComponentProps<"button"> & { githubUrl: string; markdownUrl: string }) => {
-  const pathname = usePathname();
-  const items = useMemo<Array<PageLink>>(() => {
-    const pageUrl = new URL(pathname, SITE_ORIGIN);
-    const q = `Read ${pageUrl}, I want to ask questions about it.`;
-
-    return [
-      { href: githubUrl, icon: <GitHubIcon />, title: "Open in GitHub" },
-      { href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" },
-      ...AI_PROVIDERS.map(({ buildHref, icon, title }) => ({ href: buildHref(q), icon, title })),
-    ];
-  }, [githubUrl, markdownUrl, pathname]);
+const OpenPopover = ({ markdownUrl, pageUrl, sourceUrl }: PageActionsProps) => {
+  const prompt = `Read ${pageUrl}, I want to ask questions about it.`;
+  const links = [
+    { href: sourceUrl, icon: <GitHubIcon />, title: "Open in GitHub" },
+    { href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" },
+    ...AI_PROVIDERS.map(({ buildHref, icon, title }) => ({ href: buildHref(prompt), icon, title })),
+  ];
 
   return (
     <Popover>
-      <PopoverTrigger
-        {...props}
-        className={props.className}
-        render={<Button size="sm" variant="secondary" />}
-      >
-        {props.children ?? "Open"}
+      <PopoverTrigger render={<Button size="sm" variant="secondary" />}>
+        Open
         <ChevronDown className="text-docs-muted-foreground size-3.5" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
-        {items.map((item) => (
+        {links.map((link) => (
           <a
             className="hover:text-docs-accent-foreground hover:bg-docs-accent inline-flex items-center gap-2 rounded-lg p-2 text-sm [&_svg]:size-4"
-            href={item.href}
-            key={item.href}
+            href={link.href}
+            key={link.href}
             rel="noreferrer noopener"
             target="_blank"
           >
-            {item.icon}
-            {item.title}
+            {link.icon}
+            {link.title}
             <ExternalLinkIcon className="text-docs-muted-foreground ms-auto size-3.5" />
           </a>
         ))}
@@ -198,4 +163,11 @@ const ViewOptionsPopover = ({
   );
 };
 
-export { MarkdownCopyButton, ViewOptionsPopover };
+const PageActions = (links: PageActionsProps) => (
+  <>
+    <CopyMarkdownButton markdownUrl={links.markdownUrl} />
+    <OpenPopover {...links} />
+  </>
+);
+
+export { PageActions };
