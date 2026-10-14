@@ -2,6 +2,14 @@
 
 Guidance for AI coding agents working in `acme-package`. `CLAUDE.md` is a symlink to this file.
 
+## Friction Log
+
+- Log papercuts and friction (tooling, docs, APIs, tests, conventions) as you hit them with `npx frog log`.
+- Do not add global, system, or internal friction.
+- Run `npx frog list` first to see what is already known.
+
+Entries live in `.agents/friction-log/`, one directory each. A GitHub Action reports them as issues and deletes the entry once the issue closes, so anything still in that directory is still outstanding.
+
 ## What this repo is
 
 The **library-monorepo template**, and the source of truth for the fleet's `library` profile (the analog of acme-monorepo for SaaS). Forks turn it into a real published library; changes here propagate as the standard. The example domain (`createStore`/`useStore`) is intentionally trivial: it exists to exercise the canonical package shape, not to be a product.
