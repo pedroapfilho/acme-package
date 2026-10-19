@@ -4,6 +4,7 @@ import { RootProvider } from "fumadocs-ui/provider/next";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 
+import { StaticSearchDialog } from "@/components/search-dialog";
 import { SITE_DESCRIPTION, SITE_NAME, SITE_ORIGIN } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -36,8 +37,7 @@ const RootLayout = ({ children }: { children: ReactNode }) => (
         className="reading-progress-bar bg-primary fixed top-0 left-0 z-50 h-0.5 w-full"
       />
       <div className="contents" id="main-content">
-        {/* oxlint-disable-next-line typescript/no-deprecated -- static search needs no search backend; the replacement is a custom search dialog this template avoids owning */}
-        <RootProvider search={{ options: { type: "static" } }}>{children}</RootProvider>
+        <RootProvider search={{ SearchDialog: StaticSearchDialog }}>{children}</RootProvider>
       </div>
     </body>
   </html>
