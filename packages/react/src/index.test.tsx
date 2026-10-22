@@ -20,6 +20,7 @@ const Counter = ({ serverSnapshot, store }: CounterProps) => {
     store,
     serverSnapshot === undefined ? undefined : { getServerSnapshot: () => serverSnapshot },
   );
+
   return (
     <button
       onClick={() => {

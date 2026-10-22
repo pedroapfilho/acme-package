@@ -32,6 +32,7 @@ ${await page.data.getText("processed")}`;
 
 const renderAllPagesMarkdown = async (source: { getPages: () => Array<MarkdownPage> }) => {
   const pages = await Promise.all(source.getPages().map(renderPageMarkdown));
+
   return pages.join("\n\n");
 };
 
@@ -44,6 +45,7 @@ const linkMarkdownNode = (node: Node): Node => {
   if (node.type === "page") {
     return linkMarkdownItem(node);
   }
+
   if (node.type === "folder") {
     return {
       ...node,
@@ -51,12 +53,14 @@ const linkMarkdownNode = (node: Node): Node => {
       index: node.index && linkMarkdownItem(node.index),
     };
   }
+
   return node;
 };
 
 const renderMarkdownIndex = <C extends LoaderConfig>(source: LoaderOutput<C>) => {
   const tree = source.getPageTree();
   const markdownTree: Root = { ...tree, children: tree.children.map(linkMarkdownNode) };
+
   // llms() links each page node by its url and has no option to change it.
   return llms({ ...source, getPageTree: () => markdownTree }).index();
 };

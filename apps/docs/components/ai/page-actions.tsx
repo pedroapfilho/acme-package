@@ -1,4 +1,5 @@
 "use client";
+
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 
@@ -39,6 +40,7 @@ const markdownCache = new Map<string, Promise<string>>();
 // task or Safari rejects it as lacking a user gesture.
 const loadMarkdown = (url: string): Promise<string> => {
   const cached = markdownCache.get(url);
+
   if (cached) {
     return cached;
   }
@@ -46,9 +48,11 @@ const loadMarkdown = (url: string): Promise<string> => {
   const pending = (async () => {
     try {
       const response = await fetch(url);
+
       if (!response.ok) {
         throw new Error(`fetching ${url} failed with ${response.status}`);
       }
+
       return await response.text();
     } catch (error) {
       markdownCache.delete(url);
@@ -68,6 +72,7 @@ const loadMarkdown = (url: string): Promise<string> => {
   })();
 
   markdownCache.set(url, pending);
+
   return pending;
 };
 
@@ -102,6 +107,7 @@ const CopyMarkdownButton = ({ markdownUrl }: Pick<PageActionsProps, "markdownUrl
   const handleClick = (): void => {
     startTransition(async () => {
       const markdown = loadMarkdown(markdownUrl);
+
       try {
         await navigator.clipboard.write([
           new ClipboardItem({
@@ -132,6 +138,7 @@ const CopyMarkdownButton = ({ markdownUrl }: Pick<PageActionsProps, "markdownUrl
 
 const OpenPopover = ({ markdownUrl, pageUrl, sourceUrl }: PageActionsProps) => {
   const prompt = `Read ${pageUrl}, I want to ask questions about it.`;
+
   const links = [
     { href: sourceUrl, icon: <GitHubIcon />, title: "Open in GitHub" },
     { href: markdownUrl, icon: <TextIcon />, title: "View as Markdown" },

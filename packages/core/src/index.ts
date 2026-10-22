@@ -19,16 +19,20 @@ const createStore = <T>(initial: T): Store<T> => {
     get: () => state,
     set: (updater) => {
       const value = isUpdaterFunction(updater) ? updater(state) : updater;
+
       if (Object.is(value, state)) {
         return;
       }
+
       state = value;
+
       for (const listener of listeners) {
         listener();
       }
     },
     subscribe: (listener) => {
       listeners.add(listener);
+
       return () => {
         listeners.delete(listener);
       };
@@ -37,4 +41,5 @@ const createStore = <T>(initial: T): Store<T> => {
 };
 
 export { createStore };
+
 export type { Store, Updater };

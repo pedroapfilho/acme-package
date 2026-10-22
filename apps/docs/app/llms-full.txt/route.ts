@@ -6,6 +6,7 @@ import { source } from "@/lib/source";
 const getLlmsFull = async () => {
   "use cache";
   cacheLife("max");
+
   return renderAllPagesMarkdown(source);
 };
 

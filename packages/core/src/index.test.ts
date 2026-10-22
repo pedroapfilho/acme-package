@@ -51,9 +51,11 @@ describe("createStore", () => {
   it("a listener that unsubscribes itself does not block other listeners", () => {
     const store = createStore(0);
     const second = vi.fn<() => void>();
+
     const unsubscribeFirst = store.subscribe(() => {
       unsubscribeFirst();
     });
+
     store.subscribe(second);
 
     store.set(1);
