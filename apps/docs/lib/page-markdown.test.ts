@@ -37,6 +37,7 @@ const source = docsSource(
 
 const pageAtMarkdownRoute = (pathname: string) => {
   const [route, ...slugs] = pathname.split("/").filter(Boolean);
+
   return route === "llms.mdx" ? source.getPage(slugs) : undefined;
 };
 
@@ -45,7 +46,9 @@ const rewrittenPathname = async (pathname: string) => {
     nextConfig: { rewrites: () => Promise.resolve(markdownRewrites) },
     url: new URL(pathname, SITE_ORIGIN).href,
   });
+
   const rewritten = getRewrittenUrl(response);
+
   return rewritten === null ? null : new URL(rewritten).pathname;
 };
 
@@ -103,6 +106,7 @@ describe("renderAllPagesMarkdown", () => {
       virtualPage("index.mdx", "Introduction", () => Promise.resolve("Welcome.")),
       virtualPage("core.mdx", "Core", () => Promise.reject(new Error("unprocessable"))),
     );
+
     await expect(renderAllPagesMarkdown(broken)).rejects.toThrow("unprocessable");
   });
 });

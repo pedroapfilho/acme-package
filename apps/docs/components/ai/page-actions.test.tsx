@@ -32,6 +32,7 @@ const stubClipboard = () => {
       },
     },
   });
+
   return copied;
 };
 
@@ -55,6 +56,7 @@ describe("PageActions", () => {
     const fetchMarkdown = vi
       .fn<() => Promise<Response>>()
       .mockResolvedValueOnce(new Response("# Core"));
+
     vi.stubGlobal("fetch", fetchMarkdown);
     const copied = stubClipboard();
     await renderPageActions();
@@ -72,6 +74,7 @@ describe("PageActions", () => {
       .fn<() => Promise<Response>>()
       .mockResolvedValueOnce(new Response("", { status: 500 }))
       .mockResolvedValueOnce(new Response("# Core"));
+
     vi.stubGlobal("fetch", fetchMarkdown);
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const copied = stubClipboard();
@@ -106,6 +109,7 @@ describe("PageActions", () => {
     expect(screen.getByRole("link", { name: /View as Markdown/ }).getAttribute("href")).toBe(
       LINKS.markdownUrl,
     );
+
     for (const [title, param] of [
       ["Open in Scira AI", "q"],
       ["Open in ChatGPT", "q"],
