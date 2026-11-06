@@ -7,11 +7,7 @@
     "build": {
       "env": ["EXPOSE_TESTING_API"],
       "dependsOn": ["^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**", ".output/**"]
-    },
-    "lint": {
-      "dependsOn": ["^build"],
-      "outputs": []
+      "outputs": ["dist/**"]
     },
     "typecheck": {
       "dependsOn": ["^build"]
@@ -31,7 +27,8 @@
     },
     "test:coverage": {
       "dependsOn": ["^build"],
-      "outputs": ["coverage/**"]
+      "outputs": ["coverage/**"],
+      "cache": false
     },
     "clean": {
       "cache": false

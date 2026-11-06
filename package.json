@@ -5,7 +5,7 @@
   "scripts": {
     "start": "turbo run start",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "lint": "turbo run build --filter=\"./packages/*\" --output-logs=errors-only && oxlint .",
     "format": "oxfmt",
     "format:check": "oxfmt --check",
     "typecheck": "turbo run typecheck",
@@ -15,7 +15,7 @@
     "test:coverage": "turbo run test:coverage",
     "changeset": "changeset",
     "version-packages": "changeset version",
-    "release": "turbo run build && changeset publish",
+    "release": "turbo run build --filter=\"./packages/*\" && changeset publish",
     "fallow": "fallow",
     "fallow:dead": "fallow dead-code",
     "fallow:dupes": "fallow dupes",

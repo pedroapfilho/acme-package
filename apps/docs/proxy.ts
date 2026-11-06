@@ -15,7 +15,7 @@ export const config = {
   // A plain string literal so Next can statically extract the matcher.
   // The `.*\.` alternative excludes every dotted path, which already covers the
   // llms.txt / llms-full.txt / llms.mdx routes and the *.md rewrites in next.config.ts.
-  matcher: ["/((?!api|_next|.*\\.).*)"],
+  matcher: ["/((?!api/|_next/|.*\\.).*)"],
 };
 
 export default proxy;

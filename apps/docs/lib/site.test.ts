@@ -3,9 +3,9 @@ import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
-import { docsSourceUrl, REPOSITORY_URL, SITE_ORIGIN, siteUrl } from "./site";
+import { DOCS_CONTENT_DIR, docsSourceUrl, REPOSITORY_URL, SITE_ORIGIN, siteUrl } from "./site";
 
-const CONTENT_DIR = join(import.meta.dirname, "../content/docs");
+const CONTENT_DIR = join(import.meta.dirname, "..", DOCS_CONTENT_DIR);
 
 const GITHUB_REPOSITORY_URL = /https:\/\/github\.com\/[\w-]+\/[\w.-]*[\w-]/g;
 

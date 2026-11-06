@@ -14,7 +14,6 @@
   ],
   "type": "module",
   "sideEffects": false,
-  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -28,7 +27,6 @@
     "build": "tsdown",
     "clean": "rm -rf dist",
     "dev": "tsdown --watch",
-    "lint": "oxlint src",
     "prepack": "pnpm run build",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

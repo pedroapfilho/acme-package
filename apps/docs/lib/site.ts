@@ -10,13 +10,15 @@ const SITE_ORIGIN = "https://docs.acme-package.dev";
 
 const REPOSITORY_URL = "https://github.com/pedroapfilho/acme-package";
 
-const GITHUB_DOCS_BASE = `${REPOSITORY_URL}/blob/main/apps/docs/content/docs`;
+const DOCS_CONTENT_DIR = "content/docs";
 
-const docsSourceUrl = (pagePath: string) => `${GITHUB_DOCS_BASE}/${pagePath}`;
+const docsSourceUrl = (pagePath: string) =>
+  `${REPOSITORY_URL}/blob/main/apps/docs/${DOCS_CONTENT_DIR}/${pagePath}`;
 
 const siteUrl = (path: string) => `${SITE_ORIGIN}${path}`;
 
 export {
+  DOCS_CONTENT_DIR,
   docsSourceUrl,
   REPOSITORY_URL,
   SITE_DESCRIPTION,

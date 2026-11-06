@@ -22,8 +22,13 @@ Everything you must touch after forking, in order:
    BSD-only and fails on GNU sed in CI). The `--include="*.mdx"` ensures docs
    pages that reference `@acme/core` or `@acme/react` are rewritten too.
 
-2. **Repo identity.** The root `package.json` `name`, the `repository.url` in
-   **both** publishable packages, and:
+   Then run `pnpm install` so `pnpm-lock.yaml` names the new scope (CI installs
+   with a frozen lockfile), and delete the template's pending changesets
+   (`.changeset/*.md`, keeping `config.json`): they describe the template's
+   history and name `@acme/*`, so the first `changeset version` would fail.
+
+2. **Repo identity.** The root `package.json` `name`, the `author` and
+   `repository.url` in **both** publishable packages, and:
    - the product name, wordmark, description, site origin, and repository URL
      in `apps/docs/lib/site.ts`. The docs metadata, nav, GitHub links, and
      absolute page URLs all read from it.
@@ -32,7 +37,7 @@ Everything you must touch after forking, in order:
      fails until it matches `site.ts`.
    - the title in `apps/demo-vite/index.html` and the title and text in
      `apps/demo-vite/public/404.html`.
-   - `README.md` and `AGENTS.md`, which name the repo and its docs dev URL.
+   - `README.md` and `AGENTS.md`, which name the repo and its dev URLs.
 
    The `repository.url` matters more than it looks: npm provenance validates
    it against the repository that runs the publish, so a renamed fork's first
@@ -55,15 +60,25 @@ Releases run through Changesets:
 
 `release.yml` authenticates through npm trusted publishing: it exchanges a
 GitHub OIDC token for a short-lived npm credential, so the repository stores
-no npm token. Before the first release, register this repository and the
-`release.yml` workflow as the trusted publisher in each package's settings on
-npmjs.com, then set the `RELEASE_ENABLED` repository variable to `true`. The
-release job is skipped until that variable is set.
+no npm token. Before the first release:
+
+1. Register this repository and the `release.yml` workflow as the trusted
+   publisher in each package's settings on npmjs.com.
+2. Create a GitHub App with read and write access to contents and pull
+   requests, and install it on the repository. `release.yml` opens the
+   Version Packages PR with its token, because GitHub holds a PR opened by
+   `GITHUB_TOKEN` for manual approval before its checks run. Store the App's
+   client ID in the `RELEASE_APP_CLIENT_ID` repository variable and a private
+   key in the `RELEASE_APP_PRIVATE_KEY` secret.
+3. Set the `RELEASE_ENABLED` repository variable to `true`. The release job is
+   skipped until that variable is set.
 
 ## Adding a package
 
 Copy `packages/core` (or `packages/react` if the new package binds to React),
-then rename the `name` field in the copy's `package.json`.
+then set `name`, `description` and `repository.directory` in the copy's
+`package.json`, reset its `version` to `0.0.0`, and delete any copied
+`CHANGELOG.md`.
 The package shape is the contract; keep it identical across packages:
 
 - `exports` map with `types` first

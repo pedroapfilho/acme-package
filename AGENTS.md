@@ -29,7 +29,7 @@ packages/
   config-typescript/   @repo/typescript-config (tsconfig presets: base/react-library/vite/nextjs)
   config-vitest/       @repo/config-vitest (vitest presets: node/react + coverage thresholds)
   core/                @acme/core (publishable, platform-neutral example lib)
-  react/               @acme/react (publishable React adapter, peer react ^18.3.1 || ^19)
+  react/               @acme/react (publishable React adapter, React as a peer)
 apps/
   docs/                Fumadocs on Next 16: https://acme-package.docs.localhost (portless; URL set via --name flag in apps/docs dev script)
   demo-vite/           Vite playground consuming both packages via workspace:*
@@ -37,14 +37,14 @@ apps/
 
 ## Dev workflow
 
-Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `lint`, `typecheck`, `clean`, `start`. Root-only: `format`/`format:check` (oxfmt), the `fallow*` suite, `changeset`/`version-packages`/`release`. Pre-commit runs husky → lint-staged (oxlint + oxfmt).
+Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `typecheck`, `clean`, `start`. `lint` builds the packages (type-aware rules read their `.d.ts`), then runs oxlint over the whole repo, the same scope CI lints. Root-only: `format`/`format:check` (oxfmt), the `fallow*` suite, `changeset`/`version-packages`/`release`. Pre-commit builds the packages, then runs lint-staged (oxlint + oxfmt).
 
 ## Publishable package contract
 
 Every publishable package keeps the same shape; copy `packages/core` to add one. Nothing outside the package directory names it: `publish-checks.yml` runs publint and attw in every package under `packages/` that is not `private: true`.
 
 - `exports: { ".": { types, default } }`, `files: ["dist"]`, `sideEffects: false`, `publishConfig.access: public`, MIT
-- tsdown build: ESM-only, `dts`, `sourcemap`, `target es2022`, `treeshake`, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build); `platform: neutral` (core-like) or `browser` (react-like)
+- tsdown build in `tsdown.config.ts`: ESM-only with declarations, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build), and `platform: neutral` (core-like) or `browser` (react-like)
 - `prepack` runs the build (turbo owns ordering everywhere else, so there is no `prepare` build); `typecheck` is `tsc --noEmit` against `@repo/typescript-config/{base,react-library}.json` and covers test files
 - Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset. The package's `turbo.json` opts `test` into Turbo's cache; the root `test` task stays uncached, so only audited unit suites cache
 
@@ -56,13 +56,13 @@ Changesets. `release.yml` (changesets/action) opens the Version Packages PR and 
 
 - kebab-case filenames; oxlint (`oxlint-config-awesomeness`) + oxfmt; no ESLint/Prettier
 - `type` over `interface`, arrow functions, exports at end, WHY-comments only
-- Node ≥24, pnpm 11.13.1 (pinned `packageManager`)
+- Node ≥24, pnpm pinned in `packageManager`
 - Playwright covers only the docs app's instant-navigation contract (`apps/docs/e2e`), and `e2e.yml` runs it. The demo is a dev playground, not a test harness.
 
 ## Notable decisions
 
 - `@acme/*` is the placeholder publish scope; forks rename it once (README → "Use this template", docs → "Using this template"). `@repo/*` configs are never renamed.
-- Seven workflows gate PRs: `lint` (formatting, dead code and oxlint as steps of one job), `test`, `typecheck`, `build`, `e2e`, `publish-checks` and a react-doctor scan. They run on pull requests, a weekly schedule and manual dispatch, never on pushes to main. `release.yml` is the eighth, on pushes to main only. Only the first six opt into `workflow_dispatch` and are re-dispatched onto the version PR by `release.yml`; react-doctor is deliberately excluded, so it must not be a required check.
+- Six workflows gate PRs: `lint` (formatting, dead code and oxlint as steps of one job), `test`, `typecheck`, `build`, `e2e` and `publish-checks`. They run on pull requests, a weekly schedule and manual dispatch, never on pushes to main. React Doctor runs on pull requests only and is not a required check. `release.yml` runs on pushes to main and opens the version PR with a GitHub App token, so that PR runs its own `pull_request` checks; nothing dispatches gates onto it.
 - This repo is registered in standy (`~/dev/standy`) as the `library` profile's base; tsconfig (`base.json`) and root devDependency versions are the check baseline for the fleet's library repos. Change them deliberately.
 - `apps/docs/turbo.json` disables Turbo caching for the docs build. Next.js file traces (`.nft.json`) record pnpm paths such as `node_modules/.pnpm/node_modules/...` that differ between dependency installs, so a Vercel build that restores cached traces fails packaging with ENOENT. Every Next app that deploys retraces against the current install; package builds stay cached.
 

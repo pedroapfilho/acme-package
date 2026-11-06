@@ -7,17 +7,15 @@ export const metadata: Metadata = {
 };
 
 const NotFound = () => (
-  <main className="contents">
-    <DocsPage>
-      <DocsTitle>Page not found</DocsTitle>
-      <DocsBody>
-        <p>There is no page at this address.</p>
-        <p>
-          <Link href="/">Back to the docs</Link>
-        </p>
-      </DocsBody>
-    </DocsPage>
-  </main>
+  <DocsPage>
+    <DocsTitle>Page not found</DocsTitle>
+    <DocsBody>
+      <p>There is no page at this address.</p>
+      <p>
+        <Link href="/">Back to the docs</Link>
+      </p>
+    </DocsBody>
+  </DocsPage>
 );
 
 export default NotFound;

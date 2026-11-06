@@ -1,7 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { docsSourceUrl, siteUrl } from "../../lib/site";
+import { docsSourceUrl, siteUrl } from "@/lib/site";
+
+import { PageActions } from "./page-actions";
 
 const LINKS = {
   markdownUrl: "/core.md",
@@ -36,16 +38,9 @@ const stubClipboard = () => {
   return copied;
 };
 
-const renderPageActions = async () => {
-  const { PageActions } = await import("./page-actions");
-  render(<PageActions {...LINKS} />);
-};
+const renderPageActions = () => render(<PageActions {...LINKS} />);
 
 describe("PageActions", () => {
-  beforeEach(() => {
-    vi.resetModules();
-  });
-
   afterEach(() => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
@@ -59,7 +54,7 @@ describe("PageActions", () => {
 
     vi.stubGlobal("fetch", fetchMarkdown);
     const copied = stubClipboard();
-    await renderPageActions();
+    renderPageActions();
 
     fireEvent.click(screen.getByRole("button", { name: "Copy Markdown" }));
 
@@ -78,7 +73,7 @@ describe("PageActions", () => {
     vi.stubGlobal("fetch", fetchMarkdown);
     const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
     const copied = stubClipboard();
-    await renderPageActions();
+    renderPageActions();
     const button = screen.getByRole("button", { name: "Copy Markdown" });
 
     fireEvent.click(button);
@@ -98,7 +93,7 @@ describe("PageActions", () => {
   });
 
   it("links the source, the markdown and each AI provider with the absolute page URL", async () => {
-    await renderPageActions();
+    renderPageActions();
 
     fireEvent.click(screen.getByRole("button", { name: "Open" }));
 
