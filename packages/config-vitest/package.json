@@ -9,7 +9,6 @@
     "./setup-react": "./setup-react.ts"
   },
   "scripts": {
-    "lint": "oxlint",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

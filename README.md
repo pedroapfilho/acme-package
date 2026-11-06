@@ -8,13 +8,13 @@ Fork-ready monorepo template for published TypeScript libraries. tsdown ESM buil
 
 ## Quickstart
 
-Prerequisites: Node ≥24, pnpm 11 (pinned via `packageManager`), and [portless](https://www.npmjs.com/package/portless) running as the local HTTPS proxy (the docs dev URL depends on it).
+Prerequisites: Node ≥24, pnpm 11 (pinned via `packageManager`), and [portless](https://www.npmjs.com/package/portless) running as the local HTTPS proxy (the docs and demo dev URLs depend on it).
 
 ```bash
 pnpm install
-pnpm dev          # docs at https://acme-package.docs.localhost · demo at http://localhost:5173
-pnpm test         # vitest across packages
-pnpm build        # builds all workspaces (packages + docs)
+pnpm dev          # docs at https://acme-package.docs.localhost · demo at https://acme-package.demo.localhost
+pnpm test         # vitest across workspaces
+pnpm build        # builds all workspaces
 ```
 
 ## Packages
@@ -35,16 +35,7 @@ pnpm build        # builds all workspaces (packages + docs)
 
 ## Use this template
 
-The rename surface is small. Full walkthrough: docs → "Using this template".
-
-1. `@acme` scope → your npm scope (`packages/*/package.json` + imports in `apps/`, including the docs `.mdx` content)
-2. Repo identity: root `name`, `repository.url` in BOTH publishable packages (npm provenance validates it against the publishing repo, so a renamed fork's first release fails if skipped), the site identity in `apps/docs/lib/site.ts`, the repository link in `apps/docs/content/docs/index.mdx` (a test keeps it equal to `site.ts`), the titles in `apps/demo-vite/index.html` and `apps/demo-vite/public/404.html`, and this README plus `AGENTS.md`
-3. Portless names in the docs and demo dev scripts (`apps/docs/package.json` and `apps/demo-vite/package.json` → `"dev"`)
-4. LICENSE holder
-
-## Releasing
-
-Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `release.yml` publishes to npm with provenance. It authenticates through npm trusted publishing (GitHub OIDC), so the repository stores no npm token. The release job is skipped until you register this repository and `release.yml` as the trusted publisher of each package on npmjs.com and set the `RELEASE_ENABLED` repository variable to `true`.
+Fork it, then follow [Using this template](apps/docs/content/docs/using-this-template.mdx), also on the docs site. It covers the rename surface, publishing through Changesets and npm trusted publishing, and adding a package.
 
 ## Scripts
 
@@ -58,4 +49,4 @@ Changesets: `pnpm changeset`, merge the auto-opened "Version Packages" PR, and `
 
 ## Stack
 
-pnpm 11.13.1 (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 5 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8
+pnpm (pinned) · Node ≥24 · Turborepo · tsdown (ESM-only) · Vitest 5 · oxlint + oxfmt · fallow · husky + lint-staged · Changesets · Next 16 + Fumadocs · Vite 8

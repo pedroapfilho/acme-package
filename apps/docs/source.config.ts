@@ -1,7 +1,9 @@
 import { defineConfig, defineDocs } from "fumadocs-mdx/config";
 
+import { DOCS_CONTENT_DIR } from "./lib/site";
+
 export const docs = defineDocs({
-  dir: "content/docs",
+  dir: DOCS_CONTENT_DIR,
   docs: { postprocess: { includeProcessedMarkdown: true } },
 });
 

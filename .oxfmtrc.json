@@ -32,8 +32,6 @@
     "node_modules/**",
     "build/**",
     "coverage/**",
-    ".output/**",
-    ".superpowers/**",
     "pnpm-lock.yaml",
     ".github/ci/*.mjs"
   ]

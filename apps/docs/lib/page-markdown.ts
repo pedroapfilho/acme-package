@@ -30,11 +30,9 @@ const renderPageMarkdown = async (page: MarkdownPage) => `# ${page.data.title} (
 
 ${await page.data.getText("processed")}`;
 
-const renderAllPagesMarkdown = async (source: { getPages: () => Array<MarkdownPage> }) => {
-  const pages = await Promise.all(source.getPages().map(renderPageMarkdown));
-
-  return pages.join("\n\n");
-};
+const renderAllPagesMarkdown = <C extends LoaderConfig & { page: MarkdownPage }>(
+  source: LoaderOutput<C>,
+) => llms(source, { renderPage: renderPageMarkdown }).full();
 
 const linkMarkdownItem = (item: Item): Item => ({
   ...item,

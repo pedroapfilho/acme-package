@@ -23,22 +23,20 @@ const Page = async ({ params }: PageProps) => {
   const MDXContent = page.data.body;
 
   return (
-    <main className="contents" data-testid="docs-shell">
-      <DocsPage full={page.data.full} toc={page.data.toc}>
-        <DocsTitle>{page.data.title}</DocsTitle>
-        <DocsDescription>{page.data.description}</DocsDescription>
-        <div className="flex flex-row items-center gap-2 border-b pt-2 pb-6">
-          <PageActions
-            markdownUrl={pageMarkdownUrl(page.url)}
-            pageUrl={siteUrl(page.url)}
-            sourceUrl={docsSourceUrl(page.path)}
-          />
-        </div>
-        <DocsBody>
-          <MDXContent components={getMDXComponents()} />
-        </DocsBody>
-      </DocsPage>
-    </main>
+    <DocsPage data-testid="docs-shell" full={page.data.full} toc={page.data.toc}>
+      <DocsTitle>{page.data.title}</DocsTitle>
+      <DocsDescription>{page.data.description}</DocsDescription>
+      <div className="flex flex-row items-center gap-2 border-b pt-2 pb-6">
+        <PageActions
+          markdownUrl={pageMarkdownUrl(page.url)}
+          pageUrl={siteUrl(page.url)}
+          sourceUrl={docsSourceUrl(page.path)}
+        />
+      </div>
+      <DocsBody>
+        <MDXContent components={getMDXComponents()} />
+      </DocsBody>
+    </DocsPage>
   );
 };
 

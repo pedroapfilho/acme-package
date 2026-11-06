@@ -3,9 +3,9 @@
 import { Check, ChevronDown, Copy, ExternalLinkIcon, TextIcon } from "lucide-react";
 import { useEffect, useRef, useState, useTransition } from "react";
 
-import { SITE_NAME } from "../../lib/site";
-import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { SITE_NAME } from "@/lib/site";
 
 import { AnthropicIcon, CursorIcon, GitHubIcon, OpenAiIcon, SciraIcon } from "./provider-icons";
 
@@ -32,48 +32,14 @@ const AI_PROVIDERS = [
   },
 ];
 
-const markdownCache = new Map<string, Promise<string>>();
+const fetchMarkdown = async (url: string) => {
+  const response = await fetch(url);
 
-// Evicts itself on rejection so a failed fetch is never served to a later reader.
-// The returned promise stays unawaited at the call site: ClipboardItem accepts a
-// promise, and clipboard.write() must be reached synchronously within the click
-// task or Safari rejects it as lacking a user gesture.
-const loadMarkdown = (url: string): Promise<string> => {
-  const cached = markdownCache.get(url);
-
-  if (cached) {
-    return cached;
+  if (!response.ok) {
+    throw new Error(`fetching ${url} failed with ${response.status}`);
   }
 
-  const pending = (async () => {
-    try {
-      const response = await fetch(url);
-
-      if (!response.ok) {
-        throw new Error(`fetching ${url} failed with ${response.status}`);
-      }
-
-      return await response.text();
-    } catch (error) {
-      markdownCache.delete(url);
-      throw error;
-    }
-  })();
-
-  // Outside a secure context `navigator.clipboard` is undefined, so the caller
-  // throws before it ever consumes this promise. Settling it here keeps that from
-  // surfacing as an unhandled rejection; the caller still sees its own error.
-  void (async () => {
-    try {
-      await pending;
-    } catch {
-      // Deliberately swallowed: eviction and reporting are the caller's job.
-    }
-  })();
-
-  markdownCache.set(url, pending);
-
-  return pending;
+  return response.text();
 };
 
 type CopyStatus = "copied" | "failed" | "idle";
@@ -106,13 +72,10 @@ const CopyMarkdownButton = ({ markdownUrl }: Pick<PageActionsProps, "markdownUrl
 
   const handleClick = (): void => {
     startTransition(async () => {
-      const markdown = loadMarkdown(markdownUrl);
-
       try {
+        // Safari rejects a write that awaits the fetch first, so the pending text goes in the item.
         await navigator.clipboard.write([
-          new ClipboardItem({
-            "text/plain": markdown,
-          }),
+          new ClipboardItem({ "text/plain": fetchMarkdown(markdownUrl) }),
         ]);
         showStatus("copied");
       } catch (error) {
@@ -125,9 +88,9 @@ const CopyMarkdownButton = ({ markdownUrl }: Pick<PageActionsProps, "markdownUrl
   return (
     <Button disabled={isPending} onClick={handleClick} size="sm" variant="secondary">
       {status === "copied" ? (
-        <Check className="text-docs-muted-foreground" />
+        <Check className="text-muted-foreground" />
       ) : (
-        <Copy className="text-docs-muted-foreground" />
+        <Copy className="text-muted-foreground" />
       )}
       <span aria-live="polite">
         {status === "failed" ? "Copy failed. Try again" : "Copy Markdown"}
@@ -149,12 +112,12 @@ const OpenPopover = ({ markdownUrl, pageUrl, sourceUrl }: PageActionsProps) => {
     <Popover>
       <PopoverTrigger render={<Button size="sm" variant="secondary" />}>
         Open
-        <ChevronDown className="text-docs-muted-foreground size-3.5" />
+        <ChevronDown className="text-muted-foreground size-3.5" />
       </PopoverTrigger>
       <PopoverContent className="flex flex-col">
         {links.map((link) => (
           <a
-            className="hover:text-docs-accent-foreground hover:bg-docs-accent inline-flex items-center gap-2 rounded-lg p-2 text-sm [&_svg]:size-4"
+            className="hover:text-accent-foreground hover:bg-accent inline-flex items-center gap-2 rounded-lg p-2 text-sm [&_svg]:size-4"
             href={link.href}
             key={link.href}
             rel="noreferrer noopener"
@@ -162,7 +125,7 @@ const OpenPopover = ({ markdownUrl, pageUrl, sourceUrl }: PageActionsProps) => {
           >
             {link.icon}
             {link.title}
-            <ExternalLinkIcon className="text-docs-muted-foreground ms-auto size-3.5" />
+            <ExternalLinkIcon className="text-muted-foreground ms-auto size-3.5" />
           </a>
         ))}
       </PopoverContent>

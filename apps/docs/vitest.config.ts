@@ -5,8 +5,11 @@ import { defineConfig, mergeConfig } from "vitest/config";
 const docsConfig = mergeConfig(
   reactConfig,
   defineConfig({
+    resolve: {
+      tsconfigPaths: true,
+    },
     test: {
-      include: ["components/**/*.test.tsx", "lib/**/*.test.ts"],
+      include: ["**/*.test.{ts,tsx}"],
     },
   }),
 );

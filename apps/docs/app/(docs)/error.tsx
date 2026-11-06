@@ -20,25 +20,23 @@ const RouteError = ({ error, retry }: RouteErrorProps) => {
   }, [error]);
 
   return (
-    <main className="contents">
-      <DocsPage>
-        <DocsTitle className="outline-none" ref={headingRef} tabIndex={-1}>
-          Something went wrong
-        </DocsTitle>
-        <DocsBody>
-          <p>This page failed to render. Try again, and if it keeps happening, reload the page.</p>
-          {error.digest !== undefined && (
-            <p>
-              Reference: <code>{error.digest}</code>
-            </p>
-          )}
-          <Button onClick={retry} variant="outline">
-            <RefreshCw aria-hidden="true" data-icon="inline-start" />
-            Try again
-          </Button>
-        </DocsBody>
-      </DocsPage>
-    </main>
+    <DocsPage>
+      <DocsTitle className="outline-none" ref={headingRef} tabIndex={-1}>
+        Something went wrong
+      </DocsTitle>
+      <DocsBody>
+        <p>This page failed to render. Try again, and if it keeps happening, reload the page.</p>
+        {error.digest !== undefined && (
+          <p>
+            Reference: <code>{error.digest}</code>
+          </p>
+        )}
+        <Button onClick={retry} variant="outline">
+          <RefreshCw aria-hidden="true" data-icon="inline-start" />
+          Try again
+        </Button>
+      </DocsBody>
+    </DocsPage>
   );
 };
 
