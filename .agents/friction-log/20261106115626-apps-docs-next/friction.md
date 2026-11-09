@@ -1,6 +1,7 @@
 ---
 title: 'apps/docs: next.config.ts cannot load modules that import through the @/ alias'
 severity: 'minor'
+issue: 'pedroapfilho/acme-package#115'
 ---
 
 ### Expected Behavior
