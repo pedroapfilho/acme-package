@@ -37,7 +37,7 @@ apps/
 
 ## Dev workflow
 
-Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `typecheck`, `clean`, `start`. `lint` builds the packages (type-aware rules read their `.d.ts`), then runs oxlint over the whole repo, the same scope CI lints. Root-only: `format`/`format:check` (oxfmt), the `fallow*` suite, `changeset`/`version-packages`/`release`. Pre-commit builds the packages, then runs lint-staged (oxlint + oxfmt).
+Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `typecheck`, `clean`, `start`. `build:packages` builds every workspace under `packages/`; it is the one prerequisite of anything type-aware or published, because type-aware rules and the packed artifacts read the packages' `dist`. `lint` runs it and then oxlint over the whole repo, `release` runs it before `changeset publish`, and `lint.yml`, `publish-checks.yml` and the pre-commit hook call the same script. CI lints with `pnpm oxlint --format=github .`, the scope `lint` has, so the annotations land on the pull request. Root-only: `format`/`format:check` (oxfmt), the `fallow*` suite, `changeset`/`version-packages`/`release`. Pre-commit runs `build:packages`, then lint-staged (oxlint + oxfmt).
 
 ## Publishable package contract
 
