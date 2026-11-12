@@ -35,7 +35,7 @@ jobs:
           restore-keys: |
             turbo-${{ runner.os }}-${{ runner.arch }}-node24-publish-checks-${{ github.event.pull_request.number || github.ref_name }}-
             turbo-${{ runner.os }}-${{ runner.arch }}-node24-publish-checks-main-
-      - run: node .github/ci/ci.mjs run packaging -- pnpm build --filter="./packages/*"
+      - run: node .github/ci/ci.mjs run packaging -- pnpm build:packages
       # Derived rather than listed: a package copied from packages/core is
       # checked without editing this workflow.
       - name: Discover publishable packages
