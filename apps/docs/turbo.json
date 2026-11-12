@@ -4,6 +4,9 @@
   "tasks": {
     "build": {
       "cache": false
+    },
+    "test": {
+      "cache": false
     }
   }
 }

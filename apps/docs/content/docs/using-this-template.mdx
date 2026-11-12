@@ -84,10 +84,11 @@ The package shape is the contract; keep it identical across packages:
 - `exports` map with `types` first
 - `"files": ["dist"]`
 - `"sideEffects": false`
-- a `tsdown.config.ts` for the build
+- `build` runs `tsdown`, which reads the root `tsdown.config.ts`; a browser
+  package adds `--platform browser`
 - `prepack` runs the build
-- tests via `@repo/config-vitest`
-- a `turbo.json` that opts those tests into Turbo's cache
+- deterministic unit tests via `@repo/config-vitest`; the root `turbo.json`
+  caches them
 
 No file outside the package names it: `publish-checks.yml` runs publint and
 `@arethetypeswrong/cli` in every package under `packages/` that is not

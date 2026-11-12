@@ -44,9 +44,9 @@ Root scripts run turbo: `dev`, `build`, `test`, `test:coverage`, `typecheck`, `c
 Every publishable package keeps the same shape; copy `packages/core` to add one. Nothing outside the package directory names it: `publish-checks.yml` runs publint and attw in every package under `packages/` that is not `private: true`.
 
 - `exports: { ".": { types, default } }`, `files: ["dist"]`, `sideEffects: false`, `publishConfig.access: public`, MIT
-- tsdown build in `tsdown.config.ts`: ESM-only with declarations, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build), and `platform: neutral` (core-like) or `browser` (react-like)
+- tsdown build from the root `tsdown.config.ts`, which tsdown finds from each package directory: ESM-only with declarations, `minify: false` (consumer bundlers pre-bundle unminified ESM; the app minifies once at its own build) and `platform: neutral`. A browser package builds with `tsdown --platform browser`; a package with other entries passes them as arguments
 - `prepack` runs the build (turbo owns ordering everywhere else, so there is no `prepare` build); `typecheck` is `tsc --noEmit` against `@repo/typescript-config/{base,react-library}.json` and covers test files
-- Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset. The package's `turbo.json` opts `test` into Turbo's cache; the root `test` task stays uncached, so only audited unit suites cache
+- Tests: vitest via `@repo/config-vitest/{node,react}`; coverage thresholds live in the preset. The root `turbo.json` caches `test`, so a package's tests must be deterministic unit suites; a workspace whose tests are not opts out in its own `turbo.json`, as `apps/docs` does
 
 ## Publishing
 
