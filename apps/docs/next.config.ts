@@ -11,6 +11,7 @@ if (exposeTestingApi) {
 }
 
 const config: NextConfig = {
+  agentRules: false,
   cacheComponents: true,
   experimental: {
     exposeTestingApiInProductionBuild: exposeTestingApi,
