@@ -1,9 +1,10 @@
+# Written by `standy sync` from the library template and `.github/ci/policy.json`. Change those, never this file.
 name: Publish Checks
 on:
   pull_request:
   workflow_dispatch:
   schedule:
-    - cron: 22 4 * * 1
+    - cron: 38 4 * * 1
 
 permissions:
   contents: read
