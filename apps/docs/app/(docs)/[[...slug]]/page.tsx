@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { PageActions } from "@/components/ai/page-actions";
-import { pageMarkdownUrl } from "@/lib/page-markdown";
+import { pageMarkdownUrl } from "@/lib/markdown-url";
 import { docsSourceUrl, siteUrl } from "@/lib/site";
 import { source } from "@/lib/source";
 import { getMDXComponents } from "@/mdx-components";

@@ -1,7 +1,7 @@
 import { isMarkdownPreferred } from "fumadocs-core/negotiation";
 import { type NextRequest, NextResponse } from "next/server";
 
-import { markdownRoutePath } from "@/lib/page-markdown";
+import { markdownRoutePath } from "@/lib/markdown-url";
 
 const proxy = (request: NextRequest) =>
   isMarkdownPreferred(request)
