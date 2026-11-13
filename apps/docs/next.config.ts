@@ -1,7 +1,7 @@
 import { createMDX } from "fumadocs-mdx/next";
 import type { NextConfig } from "next";
 
-import { markdownRewrites } from "./lib/page-markdown";
+import { markdownRewrites } from "./lib/markdown-url";
 
 const withMDX = createMDX();
 const exposeTestingApi = process.env.EXPOSE_TESTING_API === "1";

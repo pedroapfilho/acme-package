@@ -2,6 +2,7 @@ import type { Item, Node, Root } from "fumadocs-core/page-tree";
 import type { LoaderConfig, LoaderOutput } from "fumadocs-core/source";
 import { llms } from "fumadocs-core/source/llms";
 
+import { pageMarkdownUrl } from "./markdown-url";
 import { siteUrl } from "./site";
 
 type MarkdownPage = {
@@ -11,20 +12,6 @@ type MarkdownPage = {
   };
   url: string;
 };
-
-const MARKDOWN_ROUTE = "/llms.mdx";
-
-// A plain suffix would give the index page the dotfile path "/.md".
-const pageMarkdownUrl = (pageUrl: string) => `${pageUrl === "/" ? "/index" : pageUrl}.md`;
-
-const markdownRoutePath = (pageUrl: string) =>
-  pageUrl === "/" ? MARKDOWN_ROUTE : `${MARKDOWN_ROUTE}${pageUrl}`;
-
-// "/" comes first because "/:path*.md" would send "/index.md" to a page slugged "index".
-const markdownRewrites = ["/", "/:path*"].map((pageUrl) => ({
-  destination: markdownRoutePath(pageUrl),
-  source: pageMarkdownUrl(pageUrl),
-}));
 
 const renderPageMarkdown = async (page: MarkdownPage) => `# ${page.data.title} (${page.url})
 
@@ -63,11 +50,4 @@ const renderMarkdownIndex = <C extends LoaderConfig>(source: LoaderOutput<C>) =>
   return llms({ ...source, getPageTree: () => markdownTree }).index();
 };
 
-export {
-  markdownRewrites,
-  markdownRoutePath,
-  pageMarkdownUrl,
-  renderAllPagesMarkdown,
-  renderMarkdownIndex,
-  renderPageMarkdown,
-};
+export { renderAllPagesMarkdown, renderMarkdownIndex, renderPageMarkdown };

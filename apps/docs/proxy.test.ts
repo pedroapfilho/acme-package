@@ -1,7 +1,7 @@
 import { unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { describe, expect, it } from "vitest";
 
-import { markdownRoutePath, pageMarkdownUrl } from "@/lib/page-markdown";
+import { markdownRoutePath, pageMarkdownUrl } from "@/lib/markdown-url";
 
 import { config } from "./proxy";
 

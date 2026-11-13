@@ -5,14 +5,8 @@ import {
 } from "next/experimental/testing/server";
 import { describe, expect, it } from "vitest";
 
-import {
-  markdownRewrites,
-  markdownRoutePath,
-  pageMarkdownUrl,
-  renderAllPagesMarkdown,
-  renderMarkdownIndex,
-  renderPageMarkdown,
-} from "./page-markdown";
+import { markdownRewrites, markdownRoutePath, pageMarkdownUrl } from "./markdown-url";
+import { renderAllPagesMarkdown, renderMarkdownIndex, renderPageMarkdown } from "./page-markdown";
 import { SITE_ORIGIN } from "./site";
 
 type VirtualDocs = StaticSource<{
