@@ -14,4 +14,7 @@ apps/docs/app/global-error.module.css
 apps/docs/app/use-error-heading.ts
 apps/docs/playwright.config.ts
 packages/config-typescript/base.json
+packages/config-vitest/node.ts
+packages/config-vitest/react.ts
+packages/config-vitest/setup-react.ts
 tsdown.config.ts
