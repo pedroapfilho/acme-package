@@ -1,3 +1,4 @@
+# Written by `standy sync` from the library template and `.github/ci/policy.json`. Change those, never this file.
 name: Release
 
 on:
@@ -12,9 +13,6 @@ permissions:
 
 jobs:
   release:
-    # Dormant in the template: the example @acme/* packages are placeholders a
-    # fork renames before publishing. Forks activate releases by setting the
-    # RELEASE_ENABLED variable and registering an npm trusted publisher per package.
     if: vars.RELEASE_ENABLED == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 30

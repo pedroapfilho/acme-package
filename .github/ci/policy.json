@@ -1,5 +1,11 @@
 {
   "version": 1,
   "profile": "library",
-  "mode": "affected"
+  "mode": "affected",
+  "test": {
+    "coverage": true
+  },
+  "release": {
+    "if": "vars.RELEASE_ENABLED == 'true'"
+  }
 }
