@@ -29,3 +29,4 @@ minimumReleaseAgeExclude:
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - semver@6.3.1
+  - tsrs@0.25.0-ts7.1.0-beta
