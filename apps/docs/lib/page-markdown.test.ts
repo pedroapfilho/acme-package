@@ -106,8 +106,8 @@ describe("renderAllPagesMarkdown", () => {
 });
 
 describe("renderMarkdownIndex", () => {
-  it("links each page to its absolute markdown url", async () => {
-    expect(await renderMarkdownIndex(source)).toBe(
+  it("links each page to its absolute markdown url", () => {
+    expect(renderMarkdownIndex(source)).toBe(
       [
         "# Docs",
         "",
