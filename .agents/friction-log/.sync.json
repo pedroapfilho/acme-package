@@ -1,0 +1,9 @@
+{
+  "mirrors": [
+    {
+      "issue": "pedroapfilho/acme-package#115",
+      "path": ".agents/friction-log/20261106115626-apps-docs-next/friction.md"
+    }
+  ],
+  "version": 1
+}
